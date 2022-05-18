@@ -1,6 +1,7 @@
 #include "Voronoi.h"
 
 #include "boost/polygon/voronoi.hpp"
+#include "Core/Algorithms/Utils.h"
 
 #include <unordered_set>
 
@@ -166,7 +167,21 @@ std::vector<QLineF> voronoiDiagramToLines(const voronoi_diagram<double>& vd)
     return result;
 }
 
-std::vector<QPolygonF> voronoiDiagram_1(const std::vector<QPointF>& sites, const int diagramSize)
+void pushBounds(std::vector<Segment>& segments)
+{
+    auto bbox = getSceneBBox();
+    auto tl = bbox.topLeft();
+    auto tr = bbox.topRight();
+    auto bl = bbox.bottomLeft();
+    auto br = bbox.bottomRight();
+
+    segments.push_back(Segment(tl.x(), tl.y(), tr.x(), tr.y()));
+    segments.push_back(Segment(tr.x(), tr.y(), br.x(), br.y()));
+    segments.push_back(Segment(br.x(), br.y(), bl.x(), bl.y()));
+    segments.push_back(Segment(bl.x(), bl.y(), tl.x(), tl.y()));
+}
+
+std::vector<QPolygonF> voronoiDiagram_1(const std::vector<QPointF>& sites)
 {
     voronoi_diagram<double> vd;
 
@@ -178,17 +193,14 @@ std::vector<QPolygonF> voronoiDiagram_1(const std::vector<QPointF>& sites, const
         points.push_back(Point(site.x(), site.y()));
     }
 
-    segments.push_back(Segment(diagramSize, diagramSize, diagramSize, -diagramSize));
-    segments.push_back(Segment(diagramSize, -diagramSize, -diagramSize, -diagramSize));
-    segments.push_back(Segment(-diagramSize, -diagramSize, -diagramSize, diagramSize));
-    segments.push_back(Segment(-diagramSize, diagramSize, diagramSize, diagramSize));
+    pushBounds(segments);
 
     construct_voronoi(points.begin(), points.end(), segments.begin(), segments.end(), &vd);
 
     return voronoiDiagramToPolygons(vd);
 }
 
-std::vector<QPointF> voronoiDiagram_2(const std::vector<QPointF>& sites, const int diagramSize)
+std::vector<QPointF> voronoiDiagram_2(const std::vector<QPointF>& sites)
 {
     voronoi_diagram<double> vd;
 
@@ -200,17 +212,14 @@ std::vector<QPointF> voronoiDiagram_2(const std::vector<QPointF>& sites, const i
         points.push_back(Point(site.x(), site.y()));
     }
 
-    segments.push_back(Segment(diagramSize, diagramSize, diagramSize, -diagramSize));
-    segments.push_back(Segment(diagramSize, -diagramSize, -diagramSize, -diagramSize));
-    segments.push_back(Segment(-diagramSize, -diagramSize, -diagramSize, diagramSize));
-    segments.push_back(Segment(-diagramSize, diagramSize, diagramSize, diagramSize));
+    pushBounds(segments);
 
     construct_voronoi(points.begin(), points.end(), segments.begin(), segments.end(), &vd);
 
     return voronoiDiagramToPoints(vd);
 }
 
-std::vector<QLineF> voronoiDiagram_3(const std::vector<QLineF>& lines, const int diagramSize)
+std::vector<QLineF> voronoiDiagram_3(const std::vector<QLineF>& lines)
 {
     voronoi_diagram<double> vd;
 
@@ -222,10 +231,7 @@ std::vector<QLineF> voronoiDiagram_3(const std::vector<QLineF>& lines, const int
         segments.push_back(Segment(line.p1().x(), line.p1().y(), line.p2().x(), line.p2().y()));
     }
 
-    segments.push_back(Segment(diagramSize, diagramSize, diagramSize, -diagramSize));
-    segments.push_back(Segment(diagramSize, -diagramSize, -diagramSize, -diagramSize));
-    segments.push_back(Segment(-diagramSize, -diagramSize, -diagramSize, diagramSize));
-    segments.push_back(Segment(-diagramSize, diagramSize, diagramSize, diagramSize));
+    pushBounds(segments);
 
     construct_voronoi(points.begin(), points.end(), segments.begin(), segments.end(), &vd);
 

@@ -36,15 +36,19 @@ private slots:
     void displayRoadmap();
     void displayPathInfo();
 
-    // Method
+    // Search Method
     void rapidlyExploringRandomTree();
     void shortestPathRoadmap();
     void voronoiMap();
 
-    // Generate
+    // Generate Map
     void generateRandom();
     void generateLabyrinth();
     void generatePolyLabyrinth();
+
+    // Settings
+    void useSensors();
+    void useSnapping();
 
     // Help
     void about();

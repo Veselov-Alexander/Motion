@@ -23,6 +23,7 @@ public:
     void addEdge(size_t from, size_t to);
     Node nearest(const QPointF& vertex);
     Path findPath(size_t startPoint, size_t endPoint);
+    void setMask(const Polygon& polygon);
     size_t size();
 
     std::vector<QPointF> getVertices() const;

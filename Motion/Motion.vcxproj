@@ -12,30 +12,21 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B12702AD-ABFB-343A-A199-8E24837244A3}</ProjectGuid>
-    <Keyword>QtVS_v301</Keyword>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <Keyword>QtVS_v304</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <QtMsBuild Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <PropertyGroup Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">
-    <QtMsBuild>$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-  </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
     <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
   </Target>
@@ -51,12 +42,19 @@
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <QtInstall>msvc2017_64</QtInstall>
+    <QtInstall>5.15.2_msvc2019_64</QtInstall>
     <QtModules>core;gui;widgets;xml</QtModules>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <QtInstall>msvc2017_64</QtInstall>
+    <QtInstall>5.15.2_msvc2019_64</QtInstall>
     <QtModules>core;gui;widgets;xml</QtModules>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
@@ -69,9 +67,11 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <AdditionalIncludeDirectories>$(SolutionDir);D:\Software\CGAL\auxiliary\gmp\include;D:\Software\CGAL\include;D:\Software\boost_1_72_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;D:\Software\Qt\6.2.4\mingw_64\include\QtWidgets\;$(SolutionDir);D:\Software\CGAL\auxiliary\gmp\include;D:\Software\CGAL\include;D:\Software\boost_1_72_0;D:\Software\Qt\6.2.4\mingw_64\include\QtCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -93,10 +93,14 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(SolutionDir);D:\Software\CGAL\auxiliary\gmp\include;D:\Software\CGAL\include;D:\Software\boost_1_72_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(SolutionDir);D:\Software\CGAL\auxiliary\gmp\include;D:\Software\CGAL\include;D:\Software\boost_1_72_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>true</WholeProgramOptimization>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -110,14 +114,17 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Algorithms\ConvexHull.cpp" />
     <ClCompile Include="Core\Algorithms\FindMethods\PreprocessedGraph.cpp" />
     <ClCompile Include="Core\Algorithms\FindMethods\VoronoiMap.cpp" />
     <ClCompile Include="Core\ConfigurationSpace.cpp" />
     <ClCompile Include="Core\DisplayView.cpp" />
     <ClCompile Include="Core\Algorithms\Utils.cpp" />
     <ClCompile Include="Core\FileManager.cpp" />
+    <ClCompile Include="Core\PathFinder.cpp" />
     <ClCompile Include="Core\States\DragState.cpp" />
     <ClCompile Include="Core\Algorithms\Dijkstra.cpp" />
+    <ClCompile Include="Core\Vision.cpp" />
     <ClCompile Include="Forms\AboutDialog\AboutDialog.cpp" />
     <ClCompile Include="Forms\AppWindow\AppWindow.cpp" />
     <ClCompile Include="Core\States\IdleState.cpp" />
@@ -145,12 +152,14 @@
     <QtMoc Include="Core\DisplayView.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Algorithms\ConvexHull.h" />
     <ClInclude Include="Core\Algorithms\FindMethods\PreprocessedGraph.h" />
     <ClInclude Include="Core\Algorithms\FindMethods\VoronoiMap.h" />
     <ClInclude Include="Core\ConfigurationSpace.h" />
     <ClInclude Include="Core\Algorithms\FindMethods\IFindMethod.h" />
     <ClInclude Include="Core\Algorithms\Utils.h" />
     <ClInclude Include="Core\Generate\Generate.h" />
+    <ClInclude Include="Core\PathFinder.h" />
     <ClInclude Include="Core\States\IdleState.h" />
     <ClInclude Include="Core\States\IState.h" />
     <ClInclude Include="Core\States\CreateState.h" />
@@ -167,6 +176,7 @@
     <ClInclude Include="Core\Generate\GenerateRandom.h" />
     <ClInclude Include="Core\Generate\GenerateLabyrinth.h" />
     <ClInclude Include="Core\Generate\GeneratePolyLabyrinth.h" />
+    <ClInclude Include="Core\Vision.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="Forms\AboutDialog\AboutDialog.h" />
   </ItemGroup>

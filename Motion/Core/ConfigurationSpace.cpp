@@ -38,7 +38,7 @@ QGraphicsPolygonItem* ConfigurationSpace::update(const QPolygonF& polygon)
     m_minkowskiSums.insert(minkowskiSumPolygon);
 
     QGraphicsPolygonItem* pItem = new QGraphicsPolygonItem(polygon);
-    pItem->setBrush(QBrush(Qt::gray, Qt::BrushStyle::SolidPattern));
+    pItem->setBrush(QBrush(QColor(30, 30, 30, 255), Qt::BrushStyle::SolidPattern));
     pItem->setPen(QPen(Qt::transparent));
 
     return pItem;

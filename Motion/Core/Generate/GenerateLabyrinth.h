@@ -5,7 +5,7 @@
 class GenerateLabyrinth : public Generate
 {
 public:
-    void generate() override;
+    void generateInternal() override;
 protected:
     virtual void display();
 private:

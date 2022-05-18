@@ -3,15 +3,17 @@
 #include "QBrush"
 
 #include "Core/Algorithms/Utils.h"
+#include "Core/DisplayView.h"
 
 
-DeviceGraphicsItem::DeviceGraphicsItem(const QPolygonF& polygon) : 
+DeviceGraphicsItem::DeviceGraphicsItem(const QPolygonF& polygon, Vision* pVision) :
     QGraphicsPolygonItem(polygon),
     m_animationTimer(nullptr),
-    m_animation(nullptr)
+    m_animation(nullptr),
+    m_pVision(pVision)
 {
     reshape(polygon);
-    
+
     QGraphicsPolygonItem::setBrush(QBrush(Qt::black, Qt::BrushStyle::SolidPattern));
 }
 
@@ -23,23 +25,39 @@ void DeviceGraphicsItem::reshape(const QPolygonF& polygon)
     QGraphicsPolygonItem::setPolygon(centered(polygon, {0, 0}));
 }
 
+class GraphicsItemAnimation : public QGraphicsItemAnimation
+{
+public:
+    GraphicsItemAnimation(Vision* pVision) : QGraphicsItemAnimation()
+    {
+        m_pVision = pVision;
+    }
+
+    void afterAnimationStep(qreal step) override
+    {
+        m_pVision->update(posAt(step));
+        if (step == 1.0)
+        {
+            DisplayView* pDisplayView = DisplayView::getInstance();
+            pDisplayView->getPathFinder()->subPathReached();
+        }
+    }
+private:
+    Vision* m_pVision;
+};
+
 void DeviceGraphicsItem::move(const Path& path)
 {
-    if (m_animationTimer)
-        delete m_animationTimer;
-    if (m_animation)
-        delete m_animation;
-    
     int nSpeed = 2;
     int nTotalDuration = pathLength(path) * nSpeed;
 
     m_positions.push(QGraphicsPolygonItem::pos());
-
+    
     m_animationTimer = new QTimeLine(nTotalDuration);
     m_animationTimer->setFrameRange(0, 300);
     m_animationTimer->setCurveShape(QTimeLine::CurveShape::LinearCurve);
 
-    m_animation = new QGraphicsItemAnimation();
+    m_animation = new GraphicsItemAnimation(m_pVision);
     m_animation->setItem(this);
     m_animation->setTimeLine(m_animationTimer);
 

@@ -39,15 +39,19 @@ AppWindow::AppWindow(QWidget *parent) : QMainWindow(parent)
     connect(m_ui.actionDisplay_Map, SIGNAL(triggered()), this, SLOT(displayRoadmap()));
     connect(m_ui.actionDisplay_path_info, SIGNAL(triggered()), this, SLOT(displayPathInfo()));
     
-    // Method
+    // Search Method
     connect(m_ui.actionRapidly_exploring_random_tree, SIGNAL(triggered()), this, SLOT(rapidlyExploringRandomTree()));
     connect(m_ui.actionShortest_path_roadmap, SIGNAL(triggered()), this, SLOT(shortestPathRoadmap()));
     connect(m_ui.actionVoronoi_map, SIGNAL(triggered()), this, SLOT(voronoiMap()));
 
-    // Generate
+    // Generate Map
     connect(m_ui.actionRandom, SIGNAL(triggered()), this, SLOT(generateRandom()));
     connect(m_ui.actionLabyrinth, SIGNAL(triggered()), this, SLOT(generateLabyrinth()));
     connect(m_ui.actionPolyLabyrinth, SIGNAL(triggered()), this, SLOT(generatePolyLabyrinth()));
+
+    // Settings
+    connect(m_ui.actionUsing_sensors, SIGNAL(triggered()), this, SLOT(useSensors()));
+    connect(m_ui.actionSnapping, SIGNAL(triggered()), this, SLOT(useSnapping()));
 
     // Help
     connect(m_ui.actionAbout, SIGNAL(triggered()), this, SLOT(about()));
@@ -212,6 +216,21 @@ void AppWindow::generateLabyrinth()
 void AppWindow::generatePolyLabyrinth()
 {
     generate(new GeneratePolyLabyrinth());
+}
+
+void AppWindow::useSensors()
+{
+    DisplayView* pDisplayView = DisplayView::getInstance();
+    assert(pDisplayView);
+
+    pDisplayView->useSensors(m_ui.actionUsing_sensors->isChecked());
+}
+
+void AppWindow::useSnapping()
+{
+    DisplayView* pDisplayView = DisplayView::getInstance();
+    assert(pDisplayView);
+    pDisplayView->setUseSnapping(m_ui.actionSnapping->isChecked());
 }
 
 void AppWindow::about()

@@ -21,4 +21,8 @@ struct IFindMethod
     ) = 0;
 
     virtual QGraphicsPathItem* getPathMap() = 0;
+
+    void setMask(const Polygon& polygon) { m_mask = polygon; };
+protected:
+    std::optional<Polygon> m_mask = std::nullopt;
 };

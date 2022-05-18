@@ -8,7 +8,7 @@ class RRT : public IFindMethod
 {
 public:
     RRT(int nWidth, int nHeight,
-        int nMaxIterations=75000, int nMaxDistance=50,
+        int nMaxIterations=10000, int nMaxDistance=50,
         double biasProb = 0.05);
 
     virtual Path findPath(

@@ -102,6 +102,50 @@ Path Graph::findPath(size_t startPoint, size_t endPoint)
     }
 }
 
+void Graph::setMask(const Polygon& polygon)
+{
+    std::set<size_t> invalid;
+    int valid = 0;
+    for (size_t i = 0; i < m_vertices.size(); ++i)
+    {
+        if (!polygon.inside(m_vertices[i], false))
+        {
+            invalid.insert(i);
+        }
+        else
+        {
+            valid = i;
+        }
+    }
+
+    for (size_t i = 0; i < m_vertices.size(); ++i)
+    {
+        if (invalid.find(i) != invalid.end())
+        {
+            m_vertices[i] = m_vertices[valid];
+        }
+    }
+
+    for (size_t i = 0; i < m_adjacencyList.size(); ++i)
+    {
+        if (invalid.find(i) != invalid.end())
+        {
+            m_adjacencyList[i] = {};
+            continue;
+        }
+        std::vector<size_t> newList;
+        for (size_t j = 0; j < m_adjacencyList[i].size(); ++j)
+        {
+            //QLineF line(m_vertices[i], m_vertices[m_adjacencyList[i][j]]);
+            if (invalid.find(m_adjacencyList[i][j]) == invalid.end())
+            {
+                newList.push_back(m_adjacencyList[i][j]);
+            }
+        }
+        m_adjacencyList[i] = newList;
+    }
+}
+
 size_t Graph::size()
 {
     return m_vertices.size();

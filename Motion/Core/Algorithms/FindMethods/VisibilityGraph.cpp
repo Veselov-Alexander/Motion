@@ -1,34 +1,6 @@
 #include "VisibilityGraph.h"
 
-namespace
-{
-
-std::pair<QPointF, QPointF> shifted(int index, const std::vector<QPointF>& points)
-{
-    const QPointF& a = points[index - 1 < 0 ? points.size() - 1 : index - 1];
-    const QPointF& b = points[index];
-    const QPointF& c = points[index + 1 >= points.size() ? 0 : index + 1];
-
-    QPointF diag = (a - b) + (c - b);
-
-    double angle = std::atan2(-diag.y(), -diag.x());
-
-    double area = a.x() * (b.y() - c.y()) + b.x() * (c.y() - a.y()) + c.x() * (a.y() - b.y());
-
-    if (std::abs(area) <= 1e-1)
-    {
-        throw std::exception();
-    }
-
-    const double dist = 5;
-
-    QPointF p1(b.x() - dist * std::cos(angle), b.y() - dist * std::sin(angle));
-    QPointF p2(b.x() + dist * std::cos(angle), b.y() + dist * std::sin(angle));
-
-    return { p1, p2 };
-}
-
-}
+#include "Core/Algorithms/Utils.h"
 
 void VisibilityGraph::createGraph(const PolygonSet& obstacles)
 {
@@ -66,22 +38,7 @@ void VisibilityGraph::addPoints(const std::vector<QPointF> points, const Polygon
 {
     for (int j = 0; j < points.size(); ++j)
     {
-        try
-        {
-            auto pairs = shifted(j, points);
-
-            if (!polygon.inside(pairs.first))
-            {
-                addPoint(pairs.first);
-            }
-            else if (!polygon.inside(pairs.second))
-            {
-                addPoint(pairs.second);
-            }
-        }
-        catch (...)
-        {
-            // Points are collinear. Skip
-        }
+        if (auto point = shifted(j, points, polygon))
+            addPoint(*point);
     }
 }

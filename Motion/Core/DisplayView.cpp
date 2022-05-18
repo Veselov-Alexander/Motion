@@ -21,6 +21,8 @@ QPolygonF({
 
 DisplayView* DisplayView::m_pInstance = nullptr;
 
+bool bUseVision = true;
+
 DisplayView::DisplayView(QWidget *parent) : QGraphicsView(parent)
 {
     if (!m_pInstance)
@@ -49,7 +51,12 @@ DisplayView::DisplayView(QWidget *parent) : QGraphicsView(parent)
         m_pPathMapGroup->setVisible(false);
         m_pScene->addItem(m_pPathMapGroup);
 
-        m_pDevice = new DeviceGraphicsItem(DEFAULT);
+        m_pVisionGroup = new QGraphicsItemGroup();
+        m_pScene->addItem(m_pVisionGroup);
+        m_pVision = new Vision(m_pVisionGroup);
+        useSensors(bUseVision);
+
+        m_pDevice = new DeviceGraphicsItem(DEFAULT, m_pVision);
         m_configurationSpace = ConfigurationSpace();
         m_pScene->addItem(m_pDevice);
 
@@ -69,6 +76,7 @@ DisplayView::~DisplayView()
 {
     m_pScene->clear();
 
+    delete m_pVision;
     delete m_pScene;
 }
 
@@ -102,14 +110,27 @@ void DisplayView::reset(const QPolygonF& device)
     m_pPathMapGroup = new QGraphicsItemGroup();
     m_pScene->addItem(m_pPathMapGroup);
 
-    m_pDevice = new DeviceGraphicsItem(device);
-    m_pScene->addItem(m_pDevice);
+    m_pVisionGroup = new QGraphicsItemGroup();
+    m_pScene->addItem(m_pVisionGroup);
 
-    initPathInfo();
+    m_pDevice = nullptr;
+    bool b = bUseVision;
+    if (m_pVision)
+    {
+        b = m_pVision->getEnabled();
+        delete m_pVision;
+    }
+    m_pVision = new Vision(m_pVisionGroup);
+
+    m_pDevice = new DeviceGraphicsItem(device, m_pVision);
+    m_pScene->addItem(m_pDevice);
 
     m_configurationSpace = ConfigurationSpace();
 
+    initPathInfo();
+
     setState(new IdleState());
+    useSensors(b);
 }
 
 void DisplayView::initPathInfo()
@@ -158,6 +179,7 @@ void DisplayView::reshapeDevice(const QPolygonF& polygon)
 {
     m_pDevice->reshape(polygon);
     m_configurationSpace.update();
+    m_pVision->reset();
 
     drawConfigurationSpace();
 }
@@ -190,6 +212,7 @@ void DisplayView::addObstacle(const QPolygonF& polygon)
     clearGroup(m_pPathMapGroup);
     drawConfigurationSpace();
 
+    m_pVision->reset();
     m_pDevice->clearMovesHistory();
 }
 
@@ -209,9 +232,31 @@ void DisplayView::displayRoadmap(bool bDisplay)
     m_pPathMapGroup->setVisible(bDisplay);
 }
 
+void DisplayView::useSensors(bool bUse)
+{
+    m_pVisionGroup->setVisible(bUse);
+    m_pVision->setEnabled(bUse);
+    if (m_pVision->getEnabled())
+        m_pPathFinder.reset(new VisionPathFinder());
+    else
+        m_pPathFinder.reset(new RegularPathFinder());
+}
+
+Vision* DisplayView::getVision()
+{
+    return m_pVision;
+}
+
+IPathFinder* DisplayView::getPathFinder()
+{
+    return m_pPathFinder.get();
+}
+
 QPointF DisplayView::getDevicePosition()
 {
-    return m_pDevice->pos();
+    if (m_pDevice)
+        return m_pDevice->pos();
+    return {};
 }
 
 QPolygonFList DisplayView::getObstacles()

@@ -8,6 +8,8 @@
 #include "QGraphicsEllipseItem"
 #include "QMessageBox"
 
+#include <QGuiApplication>
+
 
 CreateState::CreateState()
 {
@@ -34,13 +36,39 @@ void CreateState::mousePressEvent(QMouseEvent* pMouseEvent)
     {
         DisplayView* pDisplayView = DisplayView::getInstance();
 
-        QPointF clickPoint = pDisplayView->mapToScene(pMouseEvent->pos());
-
+        const QPointF clickPoint = pDisplayView->mapToScene(pMouseEvent->pos());
+        QPointF snappedClickPoint = clickPoint;
         QPolygonF polygon = m_pPolygon->polygon();
-        polygon.append(clickPoint);
+
+        if (pDisplayView->getUseSnapping())
+        {
+            auto round = [](qreal x)
+            {
+                qreal y = std::round(x / 20);
+                return y * 20;
+            };
+            snappedClickPoint.setX(round(clickPoint.x()));
+            snappedClickPoint.setY(round(clickPoint.y()));
+            if (QGuiApplication::keyboardModifiers().testFlag(Qt::ShiftModifier) && !polygon.isEmpty()) {
+                const QPointF lastPoint = polygon.last();
+                auto dx = std::fabs(snappedClickPoint.x() - lastPoint.x());
+                auto dy = std::fabs(snappedClickPoint.y() - lastPoint.y());
+                if (dx > dy)
+                {
+                    snappedClickPoint.setY(lastPoint.y());
+                }
+                else
+                {
+                    snappedClickPoint.setX(lastPoint.x());
+                }
+            }
+        }
+
+        
+        polygon.append(snappedClickPoint);
 
         m_pPolygon->setPolygon(polygon);
-        addGraphicsPointItem(clickPoint);
+        addGraphicsPointItem(snappedClickPoint);
     }
 
     IdleState::mousePressEvent(pMouseEvent);

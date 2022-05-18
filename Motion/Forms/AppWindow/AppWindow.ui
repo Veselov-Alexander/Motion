@@ -76,7 +76,7 @@
    </widget>
    <widget class="QMenu" name="menuMethod">
     <property name="title">
-     <string>Method</string>
+     <string>Search Method</string>
     </property>
     <addaction name="actionRapidly_exploring_random_tree"/>
     <addaction name="actionShortest_path_roadmap"/>
@@ -90,17 +90,25 @@
    </widget>
    <widget class="QMenu" name="menuGenerate">
     <property name="title">
-     <string>Generate</string>
+     <string>Generate Map</string>
     </property>
     <addaction name="actionRandom"/>
     <addaction name="actionLabyrinth"/>
     <addaction name="actionPolyLabyrinth"/>
+   </widget>
+   <widget class="QMenu" name="menuMode">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="actionUsing_sensors"/>
+    <addaction name="actionSnapping"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuObject"/>
    <addaction name="menuView"/>
    <addaction name="menuMethod"/>
    <addaction name="menuGenerate"/>
+   <addaction name="menuMode"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionNew">
@@ -167,7 +175,7 @@
     <bool>true</bool>
    </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Rapidly-exploring random tree</string>
@@ -234,6 +242,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Voronoi Map</string>
    </property>
@@ -267,6 +278,25 @@
    </property>
    <property name="text">
     <string>Display path info</string>
+   </property>
+  </action>
+  <action name="actionUsing_sensors">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Using sensors</string>
+   </property>
+  </action>
+  <action name="actionSnapping">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Snapping</string>
    </property>
   </action>
  </widget>

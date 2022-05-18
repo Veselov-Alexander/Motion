@@ -5,6 +5,6 @@
 class GenerateRandom : public Generate
 {
 public:
-    void generate() override;
+    void generateInternal() override;
 };
 

@@ -112,14 +112,18 @@ void FileManager::openFile(const QString& path)
             {
                 throw 0;
             }
-
+            bool bUseSensors = pDisplayView->getVision()->getEnabled();
+            pDisplayView->useSensors(false);
+            
             pDisplayView->reset(device);
             pDisplayView->setDevicePosition(devicePosition);
+
 
             for (const auto& obstacle : obstacles)
             {
                 pDisplayView->addObstacle(obstacle);
             }
+            pDisplayView->useSensors(bUseSensors);
 
             m_lastFileInfo = { path, obstacles.size(), device };
         }

@@ -3,10 +3,6 @@
 #include "Core/DisplayView.h"
 #include "Core/DisplayView.h"
 #include "Core/Algorithms/FindMethods/RRT.h"
-#include "Core/Algorithms/Utils.h"
-
-#include "QMessageBox"
-
 
 void IdleState::wheelEvent(QWheelEvent* pWheelEvent)
 {
@@ -58,7 +54,7 @@ void IdleState::zoomEvent(QWheelEvent* pWheelEvent)
     qreal zoom = pDisplayView->transform().scale(factor, factor).mapRect(QRectF(0, 0, 1, 1)).width();
 
     // magic...
-    if (zoom < 0.6 || zoom > 20)
+    if (zoom < 0.4 || zoom > 20)
         return;
 
     auto targetViewportPos = pWheelEvent->pos();
@@ -95,80 +91,9 @@ void IdleState::dragEvent(QMouseEvent* pMouseEvent)
 void IdleState::moveEvent(QMouseEvent* pMouseEvent)
 {
     DisplayView* pDisplayView = DisplayView::getInstance();
-
-    QPointF source = pDisplayView->getDevicePosition();
-    QPointF destination = pDisplayView->mapToScene(pMouseEvent->pos());
-    PolygonSet obstacles = pDisplayView->getObstaclesMSums();
-
-    if (obstacles.inside(destination))
-    {
-        QMessageBox::warning(
-            pDisplayView->parentWidget(),
-            "Invalid destination",
-            "Destination point is inside the polygon."
-        );
-        return;
-    }
-
-    IFindMethod* pFindMethod = pDisplayView->getFindMethod();
-    assert(pFindMethod);
-
-    auto start = std::chrono::system_clock::now();
-
-    Path path = pFindMethod->findPath(source, destination, obstacles);
-
-    auto end = std::chrono::system_clock::now();
-    qreal elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 1000.0;
-
-    QString pathInfo;
-
-    if (!path.empty())
-    {
-        qreal length = pathLength(path);
-        pathInfo.sprintf("Path length: %4.2f units\nCalculation time: %6.4f ms.", length, elapsed);
-    }
-    else
-    {
-        pathInfo.sprintf("Path length: Path not found\nCalculation time: %6.4f ms.", elapsed);
-    }
-
-    pDisplayView->setPathInfo(pathInfo, destination);
-
-    if (path.empty())
-    {
-        QMessageBox::warning(
-            pDisplayView->parentWidget(),
-            "Could not find a path",
-            "No path exists or was not found."
-        );
-        pDisplayView->clearGroup(pDisplayView->m_pPathMapGroup);
-        pDisplayView->m_pPathMapGroup->addToGroup(pFindMethod->getPathMap());
-        return;
-    }
-
-    if (path == INVALID_PATH)
-    {
-        return;
-    }
-
-    QPainterPath qpath;
-
-    for (size_t i = 0; i < path.size() - 1; ++i)
-    {
-        QPainterPath pathLine(path[i]);
-        pathLine.lineTo(path[i + 1]);
-
-        qpath.addPath(pathLine);
-    }
-
-    auto gpath = new QGraphicsPathItem(qpath);
-    gpath->setPen(QPen(Qt::red, 3));
+    IPathFinder* pPathFinder = pDisplayView->getPathFinder();
     
-    pDisplayView->moveDevice(path);
-
-    pDisplayView->clearGroup(pDisplayView->m_pPathMapGroup);
-    pDisplayView->m_pPathMapGroup->addToGroup(pFindMethod->getPathMap());
-    pDisplayView->m_pPathMapGroup->addToGroup(gpath);
+    pPathFinder->findPath(pMouseEvent->pos());
 
     pDisplayView->setDragMode(QGraphicsView::NoDrag);
     pDisplayView->QGraphicsView::mousePressEvent(pMouseEvent);

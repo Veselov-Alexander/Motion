@@ -7,6 +7,8 @@
 #include "QGraphicsItemGroup"
 #include "QMouseEvent"
 
+#include "Core/Vision.h"
+#include "Core/PathFinder.h"
 #include "Core/DeviceGraphicsItem.h"
 #include "Core/ConfigurationSpace.h"
 #include "Core/Structures/Polygon.h"
@@ -22,9 +24,12 @@ public:
     friend class IdleState;
     friend class CreateState;
     friend class ReshapeState;
+    friend class IPathFinder;
+    friend class VisionPathFinder;
+    friend class RegularPathFinder;
 
-    const static int WIDTH = 3000;
-    const static int HEIGHT = 3000;
+    const static int HEIGHT = 2295;
+    const static int WIDTH = DisplayView::HEIGHT * 2;
 
     const static QPolygonF DEFAULT;
 
@@ -68,27 +73,49 @@ public:
     void displayMinkowski(bool bDisplay);
     void displayRoadmap(bool bDisplay);
 
+    void useSensors(bool bUse);
+    Vision* getVision();
+
+    IPathFinder* getPathFinder();
+
     void wheelEvent(QWheelEvent* pWheelEvent);
     void mousePressEvent(QMouseEvent* pWheelEvent);
     void mouseReleaseEvent(QMouseEvent* pWheelEvent);
 
+    void setUseSnapping(bool b)
+    {
+        m_bUseSnapping = b;
+    }
+
+    bool getUseSnapping()
+    {
+        return m_bUseSnapping;
+    }
+
 private:
     void clearGroup(QGraphicsItemGroup* group);
+    void resetVision();
 
 private:
     static DisplayView* m_pInstance;
+
     std::unique_ptr<IState> m_pState;
     std::unique_ptr<IFindMethod> m_pFindMethod;
+    std::unique_ptr<IPathFinder> m_pPathFinder;
 
-    QGraphicsScene* m_pScene;
-
-    QGraphicsItemGroup* m_pPolygonPreviewGroup;
-    QGraphicsItemGroup* m_pObstaclesGroup;
-    QGraphicsItemGroup* m_pMinkowskiGroup;
-    QGraphicsItemGroup* m_pPathMapGroup;
-
-    QGraphicsTextItem* m_pPathInfo;
-
-    DeviceGraphicsItem* m_pDevice;
     ConfigurationSpace m_configurationSpace;
+
+    QGraphicsScene* m_pScene = nullptr;
+
+    QGraphicsItemGroup* m_pPolygonPreviewGroup = nullptr;
+    QGraphicsItemGroup* m_pObstaclesGroup = nullptr;
+    QGraphicsItemGroup* m_pMinkowskiGroup = nullptr;
+    QGraphicsItemGroup* m_pPathMapGroup = nullptr;
+    QGraphicsItemGroup* m_pVisionGroup = nullptr;
+
+    QGraphicsTextItem* m_pPathInfo = nullptr;
+    DeviceGraphicsItem* m_pDevice = nullptr;
+    Vision* m_pVision = nullptr;
+
+    bool m_bUseSnapping = false;
 };

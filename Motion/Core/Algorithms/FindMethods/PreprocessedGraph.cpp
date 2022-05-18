@@ -14,6 +14,8 @@ Path PreprocessedGraph::findPath(const QPointF& startPoint, const QPointF& endPo
     }
 
     m_extGraph = m_graph;
+    if (m_mask)
+        m_extGraph.setMask(*m_mask);
 
     const size_t startIndex = m_extGraph.addVertex(startPoint);
     const size_t endIndex = m_extGraph.addVertex(endPoint);

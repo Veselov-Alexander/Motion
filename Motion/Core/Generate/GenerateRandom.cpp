@@ -1,7 +1,7 @@
 #include "GenerateRandom.h"
 #include "Core/DisplayView.h"
 
-void GenerateRandom::generate()
+void GenerateRandom::generateInternal()
 {
     DisplayView* pDisplayView = DisplayView::getInstance();
     auto device = pDisplayView->getDevicePolygon();

@@ -38,6 +38,7 @@ void DragState::finish()
     }
     else
     {
+        pDisplayView->useSensors(pDisplayView->getVision()->getEnabled());
         pDisplayView->setDevicePosition(currentPosition);
     }
 }

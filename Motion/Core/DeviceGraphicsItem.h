@@ -6,6 +6,7 @@
 #include "QGraphicsPolygonItem"
 
 #include "Core/Algorithms/FindMethods/IFindMethod.h"
+#include "Core/Vision.h"
 
 #include <stack>
 
@@ -13,7 +14,7 @@
 class DeviceGraphicsItem : public QGraphicsPolygonItem
 {
 public:
-    DeviceGraphicsItem(const QPolygonF& polygon);
+    DeviceGraphicsItem(const QPolygonF& polygon, Vision* pVision);
 
     void move(const Path& path);
     void reshape(const QPolygonF& polygon);
@@ -27,5 +28,6 @@ private:
     QTimeLine* m_animationTimer;
     QGraphicsItemAnimation* m_animation;
     std::stack<QPointF> m_positions;
+    Vision* m_pVision = nullptr;
 };
 

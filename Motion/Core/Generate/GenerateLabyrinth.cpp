@@ -2,7 +2,7 @@
 
 #include <random>
 
-void GenerateLabyrinth::generate()
+void GenerateLabyrinth::generateInternal()
 {
     const qreal fillCoef = 0.8;
     const qreal deviceScaleCoef = 1.3;
@@ -16,12 +16,12 @@ void GenerateLabyrinth::generate()
     const qreal height = n * m_cellSize;
     const qreal width = m * m_cellSize;
 
-    m_topleft = QPointF(- (n / 2) * m_cellSize,
-                        - (m / 2) * m_cellSize);
+    m_topleft = QPointF(- (m / 2) * m_cellSize,
+                        - (n / 2) * m_cellSize);
 
-    m_visited.assign(n, std::vector<bool>(m, false));
+    m_visited.assign(m, std::vector<bool>(n, false));
 
-    const int start = rand() % n;
+    const int start = rand() % m;
 
     m_pDisplayView->setDevicePosition(m_topleft + QPointF((start + 0.5) * m_cellSize, 0.5 * m_cellSize));
 
@@ -30,9 +30,21 @@ void GenerateLabyrinth::generate()
     display();
 }
 
-void GenerateLabyrinth::display()
+QPolygonF createPolygon(const QPointF& topleft, qreal m_cellSize, int i, int j, int div = 3)
 {
     const qreal EPS = 1;
+    QPolygonF polygon;
+    QPointF tl = topleft + QPointF(i * m_cellSize, j * m_cellSize);
+    polygon.append(tl + QPointF(-EPS, -EPS));
+    polygon.append(tl + QPointF(m_cellSize / div + EPS, -EPS));
+    polygon.append(tl + QPointF(m_cellSize / div + EPS, m_cellSize / div + EPS));
+    polygon.append(tl + QPointF(-EPS, m_cellSize / div + EPS));
+    return polygon;
+}
+
+void GenerateLabyrinth::display()
+{
+    
 
     for (int i = 0; i < m_visited.size(); ++i)
     {
@@ -40,14 +52,40 @@ void GenerateLabyrinth::display()
         {
             if (!m_visited[i][j])
             {
-                QPolygonF polygon;
+                bool right = inside(i + 1, j) ? !m_visited[i + 1][j] : false;
+                bool top = inside(i, j - 1) ? !m_visited[i][j - 1] : false;
+                bool left = inside(i - 1, j) ? !m_visited[i - 1][j] : false;
+                bool bottom = inside(i, j + 1) ? !m_visited[i][j + 1] : false;
 
-                polygon.append(m_topleft + QPointF((i + 0) * m_cellSize - EPS, (j + 0) * m_cellSize - EPS));
-                polygon.append(m_topleft + QPointF((i + 1) * m_cellSize + EPS, (j + 0) * m_cellSize - EPS));
-                polygon.append(m_topleft + QPointF((i + 1) * m_cellSize + EPS, (j + 1) * m_cellSize + EPS));
-                polygon.append(m_topleft + QPointF((i + 0) * m_cellSize - EPS, (j + 1) * m_cellSize + EPS));
 
-                m_pDisplayView->addObstacle(polygon);
+                auto size = m_cellSize / 3;
+
+                auto p = createPolygon(m_topleft + QPointF(size, size), m_cellSize, i, j);
+                m_pDisplayView->addObstacle(p);
+
+                if (top)
+                {
+                    auto p = createPolygon(m_topleft + QPointF(size, 0), m_cellSize, i, j);
+                    m_pDisplayView->addObstacle(p);
+                }
+
+                if (bottom)
+                {
+                    auto p = createPolygon(m_topleft + QPointF(size, size * 2), m_cellSize, i, j);
+                    m_pDisplayView->addObstacle(p);
+                }
+
+                if (left)
+                {
+                    auto p = createPolygon(m_topleft + QPointF(0, size), m_cellSize, i, j);
+                    m_pDisplayView->addObstacle(p);
+                }
+
+                if (right)
+                {
+                    auto p = createPolygon(m_topleft + QPointF(size * 2, size), m_cellSize, i, j);
+                    m_pDisplayView->addObstacle(p);
+                }
             }
         }
     }
