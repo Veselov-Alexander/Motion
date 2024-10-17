@@ -1,5 +1,8 @@
-#include "generate/generate_random.h"
-#include "display_view.h"
+#include "motion/generate/generate_random.h"
+#include "motion/display_view.h"
+
+namespace Motion
+{
 
 void GenerateRandom::generateInternal()
 {
@@ -26,3 +29,5 @@ void GenerateRandom::generateInternal()
         m_pDisplayView->addObstacle(polygon);
     }
 }
+
+}  // namespace Motion

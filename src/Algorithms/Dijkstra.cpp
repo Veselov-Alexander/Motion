@@ -1,6 +1,6 @@
-#include "algorithms/Dijkstra.h"
+#include "motion/algorithms/Dijkstra.h"
 
-#include "algorithms/utils.h"
+#include "motion/algorithms/utils.h"
 
 #include <boost/config.hpp>
 
@@ -10,6 +10,8 @@
 
 using namespace boost;
 
+namespace Motion
+{
 
 Path dijkstraShortestPath(int source, int destination, const Graph& graph)
 {
@@ -77,4 +79,6 @@ Path dijkstraShortestPath(int source, int destination, const Graph& graph)
     std::reverse(path.begin(), path.end());
 
     return path;
+}
+
 }

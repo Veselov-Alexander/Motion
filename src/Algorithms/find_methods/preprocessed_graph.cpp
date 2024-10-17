@@ -1,9 +1,12 @@
-#include "algorithms/find_methods/preprocessed_graph.h"
+#include "motion/algorithms/find_methods/preprocessed_graph.h"
 
-#include "display_view.h"
-#include "algorithms/Dijkstra.h"
+#include "motion/display_view.h"
+#include "motion/algorithms/Dijkstra.h"
 
 #include <vector>
+
+namespace Motion
+{
 
 Path PreprocessedGraph::findPath(const QPointF& startPoint, const QPointF& endPoint,
     const PolygonSet& obstacles)
@@ -88,3 +91,4 @@ void PreprocessedGraph::addPoint(const QPointF& point)
     m_points.push_back(point);
 }
 
+}  // namespace Motion

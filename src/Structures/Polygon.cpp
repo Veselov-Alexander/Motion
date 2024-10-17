@@ -1,15 +1,18 @@
-#include "structures/polygon.h"
+#include "motion/structures/polygon.h"
 
-#include "algorithms/utils.h"
+#include "motion/algorithms/utils.h"
 
-#include "CGAL/Boolean_set_operations_2.h"
-#include "CGAL/minkowski_sum_2.h"
+#include <CGAL/Boolean_set_operations_2.h>
+#include <CGAL/minkowski_sum_2.h>
 
 #include <boost/geometry/geometry.hpp>
 #include <boost/polygon/polygon.hpp>
 
 #include <functional>
 #include <execution>
+
+namespace Motion
+{
 
 typedef boost::geometry::model::d2::point_xy<qreal> point_xy;
 typedef boost::geometry::model::linestring<point_xy> Linestring;
@@ -627,3 +630,5 @@ Polygon PolygonSet::toPolygon() const
         result.unite(m_polygons[i]);
     return result;
 }
+
+}  // namespace Motion

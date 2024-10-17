@@ -1,11 +1,14 @@
-#include "algorithms/utils.h"
+#include "motion/algorithms/utils.h"
 
-#include "CGAL/Boolean_set_operations_2.h"
-#include "CGAL/Vector_2.h"
+#include <CGAL/Boolean_set_operations_2.h>
+#include <CGAL/Vector_2.h>
 
-#include "math.h"
+#include <math.h>
 
-#include "display_view.h"
+#include "motion/display_view.h"
+
+namespace Motion
+{
 
 QPolygonF centered(const QPolygonF& polygon, const QPointF& center)
 {
@@ -132,3 +135,5 @@ QPolygonF unclose(const QPolygonF& polygon)
     }
     return polygon;
 }
+
+}  // namespace Motion

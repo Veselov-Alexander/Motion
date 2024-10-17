@@ -1,5 +1,5 @@
-#include "algorithms/find_methods/voronoi_map.h"
-#include "algorithms/voronoi.h"
+#include "motion/algorithms/find_methods/voronoi_map.h"
+#include "motion/algorithms/voronoi.h"
 
 namespace std
 {
@@ -13,6 +13,9 @@ namespace std
     };
 
 }
+
+namespace Motion
+{
 
 VoronoiMap::VoronoiMap(int nWidth, int nHeight, int nPoints)
     : m_nWidth(nWidth), m_nHeight(nHeight), m_nPoints(nPoints)
@@ -111,3 +114,5 @@ void VoronoiMap::createGraph(const PolygonSet& obstacles)
         }
     }
 }
+
+}  // namespace Motion

@@ -1,10 +1,12 @@
-#include "states/drag_state.h"
+#include "motion/states/drag_state.h"
 
-#include "display_view.h"
-#include "algorithms/utils.h"
+#include "motion/display_view.h"
+#include "motion/algorithms/utils.h"
 
 #include <QMessageBox>
 
+namespace Motion
+{
 
 DragState::DragState()
 {
@@ -42,3 +44,5 @@ void DragState::finish()
         pDisplayView->setDevicePosition(currentPosition);
     }
 }
+
+}  // namespace Motion

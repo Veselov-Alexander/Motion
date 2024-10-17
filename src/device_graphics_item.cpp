@@ -1,10 +1,12 @@
-#include "device_graphics_item.h"
+#include "motion/device_graphics_item.h"
 
 #include <QBrush>s
 
-#include "algorithms/utils.h"
-#include "display_view.h"
+#include "motion/algorithms/utils.h"
+#include "motion/display_view.h"
 
+namespace Motion
+{
 
 DeviceGraphicsItem::DeviceGraphicsItem(const QPolygonF& polygon, Vision* pVision) :
     QGraphicsPolygonItem(polygon),
@@ -112,3 +114,5 @@ void DeviceGraphicsItem::clearMovesHistory()
 {
     m_positions = {};
 }
+
+}  // namespace Motion

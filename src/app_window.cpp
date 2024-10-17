@@ -1,20 +1,22 @@
-#include "app_window.h"
+#include "motion/app_window.h"
 
-#include "display_view.h"
-#include "states/idle_state.h"
-#include "states/create_state.h"
-#include "states/reshape_state.h"
-#include "states/drag_state.h"
-#include "file_manager.h"
-#include "algorithms/find_methods/rrt.h"
-#include "algorithms/find_methods/visibility_graph.h"
-#include "algorithms/find_methods/voronoi_map.h"
-#include "generate/generate_random.h"
-#include "generate/generate_labyrinth.h"
-#include "generate/generate_poly_labyrinth.h"
+#include "motion/display_view.h"
+#include "motion/states/idle_state.h"
+#include "motion/states/create_state.h"
+#include "motion/states/reshape_state.h"
+#include "motion/states/drag_state.h"
+#include "motion/file_manager.h"
+#include "motion/algorithms/find_methods/rrt.h"
+#include "motion/algorithms/find_methods/visibility_graph.h"
+#include "motion/algorithms/find_methods/voronoi_map.h"
+#include "motion/generate/generate_random.h"
+#include "motion/generate/generate_labyrinth.h"
+#include "motion/generate/generate_poly_labyrinth.h"
 
 #include <QFileDialog>
 
+namespace Motion
+{
 
 AppWindow::AppWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -331,3 +333,5 @@ void AppWindow::update()
         voronoiMap();
     }
 }
+
+}  // namespace Motion

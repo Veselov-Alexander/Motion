@@ -1,4 +1,7 @@
-#include "generate/generate_poly_labyrinth.h"
+#include "motion/generate/generate_poly_labyrinth.h"
+
+namespace Motion
+{
 
 void GeneratePolyLabyrinth::display()
 {
@@ -18,3 +21,5 @@ void GeneratePolyLabyrinth::display()
         }
     }
 }
+
+}  // namespace Motion

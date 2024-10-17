@@ -1,6 +1,9 @@
-#include "generate/generate_labyrinth.h"
+#include "motion/generate/generate_labyrinth.h"
 
 #include <random>
+
+namespace Motion
+{
 
 void GenerateLabyrinth::generateInternal()
 {
@@ -160,3 +163,5 @@ bool GenerateLabyrinth::inside(const int i, const int j)
 {
     return !(i < 0 || j < 0 || i >= m_visited.size() || j >= m_visited[0].size());
 }
+
+}  // namespace Motion

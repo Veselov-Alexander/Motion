@@ -1,15 +1,17 @@
-#include "states/create_state.h"
+#include "motion/states/create_state.h"
 
-#include "display_view.h"
+#include "motion/display_view.h"
 
-#include "algorithms/utils.h"
-#include "structures/polygon.h"
+#include "motion/algorithms/utils.h"
+#include "motion/structures/polygon.h"
 
 #include <QGraphicsEllipseItem>
 #include <QMessageBox>
 
 #include <QGuiApplication>
 
+namespace Motion
+{
 
 CreateState::CreateState()
 {
@@ -133,3 +135,5 @@ void CreateState::addGraphicsPointItem(const QPointF& point)
 
     pDisplayView->m_pPolygonPreviewGroup->addToGroup(pEllipse);
 }
+
+}  // namespace Motion

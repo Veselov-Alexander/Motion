@@ -1,11 +1,14 @@
-#include "structures/Graph.h"
+#include "motion/structures/graph.h"
 
-#include "algorithms/utils.h"
+#include "motion/algorithms/utils.h"
 
 #include <QPen>
 
 #include <queue>
 #include <map>
+
+namespace Motion
+{
 
 Graph::Graph()
 {
@@ -206,3 +209,5 @@ QGraphicsPathItem* Graph::asGraphicsItems()
 
     return gpath;
 }
+
+}  // namespace Motion

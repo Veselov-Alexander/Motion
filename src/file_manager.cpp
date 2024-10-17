@@ -1,9 +1,12 @@
-#include "file_manager.h"
+#include "motion/file_manager.h"
 
 #include <QXmlStreamWriter>
 #include <QMessageBox>
 
-#include "display_view.h"
+#include "motion/display_view.h"
+
+namespace Motion
+{
 
 const FileInfo FileManager::UNTITLED = { UNTITLED_FILENAME, 0, DisplayView::DEFAULT };
 FileInfo FileManager::m_lastFileInfo = FileManager::UNTITLED;
@@ -251,3 +254,5 @@ FileInfo FileManager::getCurrentInfo()
              pDisplayView->getObstacles().size(),
              pDisplayView->getDevicePolygon() };
 }
+
+}  // namespace Motion

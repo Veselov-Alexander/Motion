@@ -1,7 +1,7 @@
-#include "vision.h"
+#include "motion/vision.h"
 
-#include "display_view.h"
-#include "algorithms/convex_hull.h"
+#include "motion/display_view.h"
+#include "motion/algorithms/convex_hull.h"
 
 #include <QGraphicsEllipseItem>
 #include <QGraphicsRectItem>
@@ -13,9 +13,9 @@
 #include <execution>
 #include <mutex>
 
-#include "algorithms/utils.h"
+#include "motion/algorithms/utils.h"
 
-namespace
+namespace Motion
 {
 
 int D = 750;
@@ -73,8 +73,6 @@ QPolygonF getEllipse(QPointF center, int radius, int n = 30)
         result.push_back(QPointF(newX, newY));
     }
     return result;
-}
-
 }
 
 class QVision : public QGraphicsItem
@@ -326,3 +324,5 @@ void Vision::calculateDark()
     for (const auto& s : sub)
         m_dark.push_back(s.toPolygon());
 }
+
+}  // namespace Motion

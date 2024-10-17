@@ -1,8 +1,11 @@
-#include "states/Idle_state.h"
+#include "motion/states/Idle_state.h"
 
-#include "display_view.h"
-#include "display_view.h"
-#include "algorithms/find_methods/RRT.h"
+#include "motion/display_view.h"
+#include "motion/display_view.h"
+#include "motion/algorithms/find_methods/RRT.h"
+
+namespace Motion
+{
 
 void IdleState::wheelEvent(QWheelEvent* pWheelEvent)
 {
@@ -98,3 +101,5 @@ void IdleState::moveEvent(QMouseEvent* pMouseEvent)
     pDisplayView->setDragMode(QGraphicsView::NoDrag);
     pDisplayView->QGraphicsView::mousePressEvent(pMouseEvent);
 }
+
+}  // namespace Motion

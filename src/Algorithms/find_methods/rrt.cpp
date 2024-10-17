@@ -1,10 +1,12 @@
-#include "algorithms/find_methods/RRT.h"
+#include "motion/algorithms/find_methods/RRT.h"
 
-#include "algorithms/utils.h"
+#include "motion/algorithms/utils.h"
 #include <QtMath>
 
 #include <vector>
 
+namespace Motion
+{
 
 RRT::RRT(int nWidth, int nHeight,
          int nMaxIterations, int nMaxDistance,
@@ -86,3 +88,5 @@ QGraphicsPathItem* RRT::getPathMap()
 {
     return m_tree.asGraphicsItems();
 }
+
+}  // namespace Motion

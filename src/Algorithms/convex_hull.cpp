@@ -1,9 +1,12 @@
-#include "algorithms/convex_hull.h"
+#include "motion/algorithms/convex_hull.h"
 
 #include <CGAL/convex_hull_2.h>
 #include <CGAL/Convex_hull_traits_adapter_2.h>
-#include "display_view.h"
+#include "motion/display_view.h"
 #include <QRectF>
+
+namespace Motion
+{
 
 typedef CGAL::Convex_hull_traits_adapter_2<Kernel, CGAL::Pointer_property_map<Point_2>::type > Convex_hull_traits_2;
 
@@ -40,3 +43,5 @@ bool isConvex(const QPolygonF& polygon)
 
     return CGAL::is_convex_2(points.begin(), points.end());
 }
+
+}  // namespace Motion

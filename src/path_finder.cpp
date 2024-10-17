@@ -1,11 +1,11 @@
-#include "path_finder.h"
+#include "motion/path_finder.h"
 
-#include "display_view.h"
-#include "algorithms/utils.h"
+#include "motion/display_view.h"
+#include "motion/algorithms/utils.h"
 
 #include <QMessageBox>
 
-namespace
+namespace Motion
 {
 
 double measureTime(std::function<void(void)> f)
@@ -55,8 +55,6 @@ void showOutOfBoundsMessageBox(DisplayView* pDisplayView)
         "Out of bounds",
         "You clicked out of scene."
     );
-}
-
 }
 
 void IPathFinder::displayPath(const Path& path)
@@ -261,3 +259,5 @@ bool VisionPathFinder::visited(const QPointF& v)
                 std::fabs(v.y() - r.y()) < eps;
         }) != m_visited.end();
 }
+
+}  // namespace Motion

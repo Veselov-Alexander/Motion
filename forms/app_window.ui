@@ -29,7 +29,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="1" column="0">
-     <widget class="DisplayView" name="displayView" native="true"/>
+     <widget class="Motion::DisplayView" name="displayView" native="true"/>
     </item>
    </layout>
   </widget>
@@ -299,9 +299,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>DisplayView</class>
+   <class>Motion::DisplayView</class>
    <extends>QWidget</extends>
-   <header>DisplayView.h</header>
+   <header>display_view.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

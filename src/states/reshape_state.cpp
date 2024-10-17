@@ -1,10 +1,12 @@
-#include "states/reshape_state.h"
+#include "motion/states/reshape_state.h"
 
-#include "algorithms/utils.h"
-#include "display_view.h"
+#include "motion/algorithms/utils.h"
+#include "motion/display_view.h"
 
 #include <QMessageBox>
 
+namespace Motion
+{
 
 void ReshapeState::finish()
 {
@@ -61,3 +63,5 @@ bool ReshapeState::checkPolygonIntersection(const QPolygonF& polygon, const QLis
     }
     return false;
 }
+
+}  // namespace Motion

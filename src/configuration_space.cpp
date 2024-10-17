@@ -1,12 +1,14 @@
-#include "configuration_space.h"
+#include "motion/configuration_space.h"
 
 #include <QBrush>
 #include <QPen>
 #include <QGraphicsPolygonItem>
 
-#include "algorithms/utils.h"
-#include "display_view.h"
+#include "motion/algorithms/utils.h"
+#include "motion/display_view.h"
 
+namespace Motion
+{
 
 QPolygonFList ConfigurationSpace::getObstacles()
 {
@@ -65,3 +67,5 @@ void ConfigurationSpace::draw(QGraphicsItemGroup* pGroup)
         pGroup->addToGroup(pathitem);
     }
 }
+
+}  // namespace Motion

@@ -1,6 +1,9 @@
-#include "algorithms/find_methods/visibility_graph.h"
+#include "motion/algorithms/find_methods/visibility_graph.h"
 
-#include "algorithms/utils.h"
+#include "motion/algorithms/utils.h"
+
+namespace Motion
+{
 
 void VisibilityGraph::createGraph(const PolygonSet& obstacles)
 {
@@ -42,3 +45,5 @@ void VisibilityGraph::addPoints(const std::vector<QPointF> points, const Polygon
             addPoint(*point);
     }
 }
+
+}  // namespace Motion

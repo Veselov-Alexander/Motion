@@ -1,12 +1,15 @@
-#include "algorithms/voronoi.h"
+#include "motion/algorithms/voronoi.h"
 
-#include "boost/polygon/voronoi.hpp"
-#include "algorithms/utils.h"
+#include <boost/polygon/voronoi.hpp>
+#include "motion/algorithms/utils.h"
 
 #include <unordered_set>
 
 using boost::polygon::voronoi_builder;
 using boost::polygon::voronoi_diagram;
+
+namespace
+{
 
 struct Point 
 {
@@ -25,6 +28,8 @@ struct Segment
 
     Point p0, p1;
 };
+
+}  // namespace
 
 namespace boost 
 {
@@ -80,6 +85,9 @@ namespace std
     };
 
 }
+
+namespace Motion
+{
 
 std::vector<QPolygonF> voronoiDiagramToPolygons(const voronoi_diagram<double>& vd)
 {
@@ -237,3 +245,5 @@ std::vector<QLineF> voronoiDiagram_3(const std::vector<QLineF>& lines)
 
     return voronoiDiagramToLines(vd);
 }
+
+}  // namespace Motion

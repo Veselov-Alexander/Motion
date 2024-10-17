@@ -1,11 +1,14 @@
-#include "display_view.h"
+#include "motion/display_view.h"
 
-#include "display_view.h"
-#include "states/idle_state.h"
-#include "structures/polygon.h"
-#include "algorithms/utils.h"
+#include "motion/display_view.h"
+#include "motion/states/idle_state.h"
+#include "motion/structures/polygon.h"
+#include "motion/algorithms/utils.h"
 
 #include <QtMath>
+
+namespace Motion
+{
 
 const QPolygonF DisplayView::DEFAULT = 
 QPolygonF({
@@ -315,3 +318,5 @@ void DisplayView::mouseReleaseEvent(QMouseEvent* pWheelEvent)
 {
     m_pState->mouseReleaseEvent(pWheelEvent);
 }
+
+}  // namespace Motion
