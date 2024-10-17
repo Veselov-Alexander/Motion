@@ -1,4 +1,4 @@
-#include "Forms/AppWindow/AppWindow.h"
+#include "AppWindow.h"
 #include "QtWidgets/QApplication"
 #include <omp.h>
 
