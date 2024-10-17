@@ -1,8 +1,8 @@
 #pragma once
 
 #include "QPolygonF"
-#include "Algorithms/FindMethods/IFindMethod.h"
-#include "Structures/Polygon.h"
+#include "algorithms/find_methods/find_method.h"
+#include "structures/polygon.h"
 #include "QGraphicsPolygonItem"
 
 

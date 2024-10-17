@@ -1,8 +1,8 @@
 #pragma once
 
-#include "DisplayView.h"
+#include "display_view.h"
 #include "QRectF"
-#include "Algorithms/ConvexHull.h"
+#include "algorithms/convex_hull.h"
 
 class Generate
 {

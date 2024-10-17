@@ -3,7 +3,7 @@
 #include "QPointF"
 #include "QGraphicsPathItem"
 
-#include "Algorithms/FindMethods/IFindMethod.h"
+#include "algorithms/find_methods/find_method.h"
 
 #include <vector>
 

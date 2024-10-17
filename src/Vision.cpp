@@ -1,7 +1,7 @@
 #include "Vision.h"
 
-#include "DisplayView.h"
-#include "Algorithms/ConvexHull.h"
+#include "display_view.h"
+#include "algorithms/convex_hull.h"
 
 #include "QGraphicsEllipseItem"
 #include "QGraphicsRectItem"
@@ -13,7 +13,7 @@
 #include <execution>
 #include <mutex>
 
-#include "Algorithms/Utils.h"
+#include "algorithms/Utils.h"
 
 namespace
 {

@@ -1,7 +1,7 @@
-#include "Algorithms/Voronoi.h"
+#include "algorithms/voronoi.h"
 
 #include "boost/polygon/voronoi.hpp"
-#include "Algorithms/Utils.h"
+#include "algorithms/Utils.h"
 
 #include <unordered_set>
 

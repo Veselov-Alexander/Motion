@@ -1,6 +1,6 @@
-#include "Structures/Polygon.h"
+#include "structures/polygon.h"
 
-#include "Algorithms/Utils.h"
+#include "algorithms/Utils.h"
 
 #include "CGAL/Boolean_set_operations_2.h"
 #include "CGAL/minkowski_sum_2.h"

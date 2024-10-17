@@ -1,11 +1,11 @@
-#include "Algorithms/Utils.h"
+#include "algorithms/Utils.h"
 
 #include "CGAL/Boolean_set_operations_2.h"
 #include "CGAL/Vector_2.h"
 
 #include "math.h"
 
-#include "DisplayView.h"
+#include "display_view.h"
 
 QPolygonF centered(const QPolygonF& polygon, const QPointF& center)
 {

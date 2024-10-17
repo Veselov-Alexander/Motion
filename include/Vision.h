@@ -1,7 +1,7 @@
 #pragma once
 
 #include "QGraphicsItemGroup"
-#include "Structures/Polygon.h"
+#include "structures/polygon.h"
 
 #include <optional>
 

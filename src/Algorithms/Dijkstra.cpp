@@ -1,6 +1,6 @@
-#include "Algorithms/Dijkstra.h"
+#include "algorithms/Dijkstra.h"
 
-#include "Algorithms/Utils.h"
+#include "algorithms/Utils.h"
 
 #include <boost/config.hpp>
 

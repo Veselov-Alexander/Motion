@@ -1,6 +1,6 @@
-#include "Structures/Graph.h"
+#include "structures/Graph.h"
 
-#include "Algorithms/Utils.h"
+#include "algorithms/Utils.h"
 
 #include "QPen"
 
