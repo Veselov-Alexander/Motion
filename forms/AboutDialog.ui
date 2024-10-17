@@ -93,7 +93,7 @@
        <property name="text">
         <string>It is a teaching work that is completed as a graduation project.
 
-Designed by Alexander Veselov (2020)</string>
+Developed by Oleksandr Veselov (2020)</string>
        </property>
        <property name="textFormat">
         <enum>Qt::AutoText</enum>

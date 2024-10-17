@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../../Resources/icon.ico</normaloff>../../Resources/icon.ico</iconset>
+    <normaloff>:/icon</normaloff>:/icon</iconset>
   </property>
   <property name="documentMode">
    <bool>false</bool>
@@ -187,10 +187,6 @@
    </property>
   </action>
   <action name="actionAbout">
-   <property name="icon">
-    <iconset>
-     <normaloff>../../Resources/motion.ico</normaloff>../../Resources/motion.ico</iconset>
-   </property>
    <property name="text">
     <string>About...</string>
    </property>
@@ -305,7 +301,7 @@
   <customwidget>
    <class>DisplayView</class>
    <extends>QWidget</extends>
-   <header>Core/DisplayView.h</header>
+   <header>DisplayView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
