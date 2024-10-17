@@ -1,9 +1,9 @@
 #pragma once
 
-#include "QString"
-#include "QPolygonF"
-#include "QXmlStreamAttributes"
-#include "QStandardPaths"
+#include <QString>
+#include <QPolygonF>
+#include <QXmlStreamAttributes>
+#include <QStandardPaths>
 
 static const QString UNTITLED_FILENAME = QString("%1/untitled.mo").arg(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
 

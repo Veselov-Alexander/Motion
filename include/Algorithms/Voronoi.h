@@ -1,8 +1,8 @@
 #pragma once
 
-#include "QPolygonF"
-#include "QPointF"
-#include "QLineF"
+#include <QPolygonF>
+#include <QPointF>
+#include <QLineF>
 
 #include <vector>
 

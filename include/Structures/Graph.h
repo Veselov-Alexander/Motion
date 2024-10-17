@@ -1,7 +1,7 @@
 #pragma once
 
-#include "QPointF"
-#include "QGraphicsPathItem"
+#include <QPointF>
+#include <QGraphicsPathItem>
 
 #include "algorithms/find_methods/find_method.h"
 

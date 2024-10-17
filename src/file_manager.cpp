@@ -1,7 +1,7 @@
 #include "file_manager.h"
 
-#include "QXmlStreamWriter"
-#include "QMessageBox"
+#include <QXmlStreamWriter>
+#include <QMessageBox>
 
 #include "display_view.h"
 

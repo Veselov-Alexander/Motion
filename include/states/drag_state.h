@@ -1,8 +1,8 @@
 #pragma once
 
-#include "QPoint"
+#include <QPoint>
 
-#include "states/Idle_state.h"
+#include "states/idle_state.h"
 
 
 class DragState : public IdleState

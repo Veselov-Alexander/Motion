@@ -1,9 +1,9 @@
-#include "states/Reshape_state.h"
+#include "states/reshape_state.h"
 
-#include "algorithms/Utils.h"
+#include "algorithms/utils.h"
 #include "display_view.h"
 
-#include "QMessageBox"
+#include <QMessageBox>
 
 
 void ReshapeState::finish()

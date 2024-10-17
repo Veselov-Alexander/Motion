@@ -2,10 +2,10 @@
 
 #include "states/state.h"
 
-#include "QGraphicsView"
-#include "QGraphicsPolygonItem"
-#include "QGraphicsItemGroup"
-#include "QMouseEvent"
+#include <QGraphicsView>
+#include <QGraphicsPolygonItem>
+#include <QGraphicsItemGroup>
+#include <QMouseEvent>
 
 #include "vision.h"
 #include "path_finder.h"

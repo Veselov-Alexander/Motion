@@ -3,7 +3,7 @@
 #include "states/state.h"
 #include "algorithms/find_methods/find_method.h"
 
-#include "QtMath"
+#include <QtMath>
 
 #include <memory>
 

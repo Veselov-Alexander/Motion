@@ -1,6 +1,6 @@
 #pragma once
 
-#include "QMouseEvent"
+#include <QMouseEvent>
 
 
 struct IState

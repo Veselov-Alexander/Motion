@@ -5,11 +5,11 @@
 #include "CGAL/Polygon_with_holes_2.h"
 #include "CGAL/Vector_2.h"
 
-#include "QPainterPath"
-#include "QPolygonF"
-#include "QPointF"
-#include "QLineF"
-#include "QRect"
+#include <QPainterPath>
+#include <QPolygonF>
+#include <QPointF>
+#include <QLineF>
+#include <QRect>
 
 #include <vector>
 

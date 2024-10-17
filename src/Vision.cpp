@@ -1,19 +1,19 @@
-#include "Vision.h"
+#include "vision.h"
 
 #include "display_view.h"
 #include "algorithms/convex_hull.h"
 
-#include "QGraphicsEllipseItem"
-#include "QGraphicsRectItem"
-#include "QGraphicsPolygonItem"
-#include "QPainter"
-#include "QVector"
+#include <QGraphicsEllipseItem>
+#include <QGraphicsRectItem>
+#include <QGraphicsPolygonItem>
+#include <QPainter>
+#include <QVector>
 
 #include <functional>
 #include <execution>
 #include <mutex>
 
-#include "algorithms/Utils.h"
+#include "algorithms/utils.h"
 
 namespace
 {

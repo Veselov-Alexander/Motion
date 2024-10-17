@@ -1,9 +1,9 @@
 #pragma once
 
-#include "QPolygonF"
+#include <QPolygonF>
 #include "algorithms/find_methods/find_method.h"
 #include "structures/polygon.h"
-#include "QGraphicsPolygonItem"
+#include <QGraphicsPolygonItem>
 
 
 QPolygonF centered(const QPolygonF& polygon, const QPointF& center);

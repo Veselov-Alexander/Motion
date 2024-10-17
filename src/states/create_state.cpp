@@ -1,12 +1,12 @@
-#include "states/Create_state.h"
+#include "states/create_state.h"
 
 #include "display_view.h"
 
-#include "algorithms/Utils.h"
+#include "algorithms/utils.h"
 #include "structures/polygon.h"
 
-#include "QGraphicsEllipseItem"
-#include "QMessageBox"
+#include <QGraphicsEllipseItem>
+#include <QMessageBox>
 
 #include <QGuiApplication>
 

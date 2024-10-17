@@ -1,6 +1,6 @@
 #include "algorithms/find_methods/visibility_graph.h"
 
-#include "algorithms/Utils.h"
+#include "algorithms/utils.h"
 
 void VisibilityGraph::createGraph(const PolygonSet& obstacles)
 {

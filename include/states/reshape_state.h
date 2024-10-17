@@ -1,9 +1,9 @@
 #pragma once
 
-#include "states/Create_state.h"
+#include "states/create_state.h"
 
-#include "QPolygonF"
-#include "QGraphicsItem"
+#include <QPolygonF>
+#include <QGraphicsItem>
 
 class ReshapeState : public CreateState
 {

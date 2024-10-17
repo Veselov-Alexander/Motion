@@ -1,5 +1,5 @@
-#include "AppWindow.h"
-#include "QtWidgets/QApplication"
+#include "app_window.h"
+#include <QtWidgets/QApplication>
 #include <omp.h>
 
 int main(int argc, char* argv[])

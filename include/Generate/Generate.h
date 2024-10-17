@@ -1,7 +1,7 @@
 #pragma once
 
 #include "display_view.h"
-#include "QRectF"
+#include <QRectF>
 #include "algorithms/convex_hull.h"
 
 class Generate

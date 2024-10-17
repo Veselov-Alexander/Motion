@@ -1,8 +1,8 @@
 #pragma once
 
-#include "QPointF"
-#include "QLineF"
-#include "QGraphicsPathItem"
+#include <QPointF>
+#include <QLineF>
+#include <QGraphicsPathItem>
 #include "structures/polygon.h"
 
 #include <vector>

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "states/Idle_state.h"
+#include "states/idle_state.h"
 
-#include "QGraphicsPolygonItem"
+#include <QGraphicsPolygonItem>
 
 
 class CreateState : public IdleState

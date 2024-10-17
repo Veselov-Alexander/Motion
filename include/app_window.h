@@ -1,6 +1,6 @@
 #pragma once
 
-#include "QtWidgets/QMainWindow"
+#include <QtWidgets/QMainWindow>
 #include "ui_app_window.h"
 
 #include "generate/Generate.h"

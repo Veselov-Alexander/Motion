@@ -1,12 +1,12 @@
 #pragma once
 
-#include "QTimeLine"
-#include "QGraphicsItemAnimation"
-#include "QPolygonF"
-#include "QGraphicsPolygonItem"
+#include <QTimeLine>
+#include <QGraphicsItemAnimation>
+#include <QPolygonF>
+#include <QGraphicsPolygonItem>
 
 #include "algorithms/find_methods/find_method.h"
-#include "Vision.h"
+#include "vision.h"
 
 #include <stack>
 

@@ -1,11 +1,11 @@
 #include "display_view.h"
 
 #include "display_view.h"
-#include "states/Idle_state.h"
+#include "states/idle_state.h"
 #include "structures/polygon.h"
-#include "algorithms/Utils.h"
+#include "algorithms/utils.h"
 
-#include "QtMath"
+#include <QtMath>
 
 const QPolygonF DisplayView::DEFAULT = 
 QPolygonF({

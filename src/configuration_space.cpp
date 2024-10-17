@@ -1,10 +1,10 @@
 #include "configuration_space.h"
 
-#include "QBrush"
-#include "QPen"
-#include "QGraphicsPolygonItem"
+#include <QBrush>
+#include <QPen>
+#include <QGraphicsPolygonItem>
 
-#include "algorithms/Utils.h"
+#include "algorithms/utils.h"
 #include "display_view.h"
 
 

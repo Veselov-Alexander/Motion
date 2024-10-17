@@ -13,7 +13,7 @@
 #include "generate/generate_labyrinth.h"
 #include "generate/generate_poly_labyrinth.h"
 
-#include "QFileDialog"
+#include <QFileDialog>
 
 
 AppWindow::AppWindow(QWidget *parent) : QMainWindow(parent)

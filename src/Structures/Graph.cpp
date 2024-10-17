@@ -1,8 +1,8 @@
 #include "structures/Graph.h"
 
-#include "algorithms/Utils.h"
+#include "algorithms/utils.h"
 
-#include "QPen"
+#include <QPen>
 
 #include <queue>
 #include <map>

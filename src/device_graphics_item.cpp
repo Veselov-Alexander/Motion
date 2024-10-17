@@ -1,8 +1,8 @@
 #include "device_graphics_item.h"
 
-#include "QBrush"
+#include <QBrush>s
 
-#include "algorithms/Utils.h"
+#include "algorithms/utils.h"
 #include "display_view.h"
 
 

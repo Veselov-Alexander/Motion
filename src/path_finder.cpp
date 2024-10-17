@@ -1,9 +1,9 @@
 #include "path_finder.h"
 
 #include "display_view.h"
-#include "algorithms/Utils.h"
+#include "algorithms/utils.h"
 
-#include "QMessageBox"
+#include <QMessageBox>
 
 namespace
 {

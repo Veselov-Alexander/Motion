@@ -1,7 +1,7 @@
 #include "algorithms/find_methods/RRT.h"
 
-#include "algorithms/Utils.h"
-#include "QtMath"
+#include "algorithms/utils.h"
+#include <QtMath>
 
 #include <vector>
 
