@@ -1,9 +1,12 @@
 #pragma once
 
-#include <QPolygonF>
-#include "motion/algorithms/find_methods/find_method.h"
 #include "motion/structures/polygon.h"
+#include "motion/algorithms/find_methods/find_method.h"
+
+#include <QPolygonF>
 #include <QGraphicsPolygonItem>
+
+#include <optional>
 
 namespace Motion
 {

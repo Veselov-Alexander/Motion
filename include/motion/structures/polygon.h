@@ -1,36 +1,27 @@
 #pragma once
 
-#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
-#include <CGAL/Polygon_2.h>
-#include <CGAL/Polygon_with_holes_2.h>
-#include <CGAL/Vector_2.h>
-
-#include <QPainterPath>
-#include <QPolygonF>
-#include <QPointF>
-#include <QLineF>
 #include <QRect>
 
 #include <vector>
+#include <memory>
 
-
-namespace
-{
-    typedef CGAL::Exact_predicates_exact_constructions_kernel   Kernel;
-    typedef Kernel::Point_2                                     Point_2;
-    typedef Kernel::Segment_2                                   Segment_2;
-    typedef CGAL::Polygon_with_holes_2<Kernel>                  Polygon_with_holes_2;
-}
+class QPainterPath;
+class QPolygonF;
+class QPointF;
+class QLineF;
 
 namespace Motion
 {
 
 class PolygonSet;
+class PolygonImpl;
 
 class Polygon
 {
 public:
     Polygon();
+    ~Polygon();
+    Polygon(const Polygon& polygon);
     explicit Polygon(const QPolygonF& polygon);
     bool inside(const QPointF& point, bool bStrict = true) const;
     bool intersects(const QLineF& line, bool bStrict = false, std::vector<QPointF>* out = nullptr) const;
@@ -45,14 +36,15 @@ public:
     std::vector<QPointF> points() const;
     std::vector<std::vector<QPointF>> holes() const;
     QRectF bounds() const;
+    Polygon& operator=(const Polygon& polygon);
 private:
-    explicit Polygon(const Polygon_with_holes_2& polygon);
+    class Impl;
     QRectF boundsRect(const QPolygonF& polygon);
+    Polygon(std::unique_ptr<Impl>&& pImpl);
 private:
-    Polygon_with_holes_2 m_polygonWithHoles;
+    std::unique_ptr<Impl> m_pImpl;
     QRectF m_boundsRect;
 };
-
 
 class PolygonSet
 {
