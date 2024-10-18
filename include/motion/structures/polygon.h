@@ -22,6 +22,8 @@ public:
     ~Polygon();
     Polygon(const Polygon& polygon);
     explicit Polygon(const QPolygonF& polygon);
+    Polygon& operator=(const Polygon& polygon);
+
     bool inside(const QPointF& point, bool bStrict = true) const;
     bool intersects(const QLineF& line, bool bStrict = false, std::vector<QPointF>* out = nullptr) const;
     bool isSimple() const;
@@ -35,11 +37,10 @@ public:
     std::vector<QPointF> points() const;
     std::vector<std::vector<QPointF>> holes() const;
     QRectF bounds() const;
-    Polygon& operator=(const Polygon& polygon);
 private:
     class Impl;
     std::unique_ptr<Impl> m_pImpl;
-    Polygon(std::unique_ptr<Impl>&& pImpl);
+    Polygon(const Impl& pImpl);
 };
 
 class PolygonSet

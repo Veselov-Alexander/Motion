@@ -69,9 +69,13 @@ inline bool insideRect(const QPointF& point, const QRectF& rect)
            point.y() <= rect.y() + rect.height();
 }
 
-class Polygon::Impl 
-{
+class Polygon::Impl {
 public:
+    Impl() = default;
+    Impl(const Polygon_with_holes_2& polygon) : m_polygon(polygon) {}
+    Polygon_with_holes_2& polygon() { return m_polygon; }
+
+private:
     Polygon_with_holes_2 m_polygon;
 };
 
@@ -89,7 +93,7 @@ Polygon::Polygon(const QPolygonF& polygon)
     : m_pImpl(std::make_unique<Impl>())
 {
     try {
-        auto& points = m_pImpl->m_polygon.outer_boundary();
+        auto& points = m_pImpl->polygon().outer_boundary();
 
         for (int i = 0; i < polygon.size(); ++i)
         {
@@ -107,8 +111,8 @@ Polygon::Polygon(const QPolygonF& polygon)
     catch (...) {}
 }
 
-Polygon::Polygon(std::unique_ptr<Impl>&& pImpl)
-    : m_pImpl(std::move(pImpl)) {}
+Polygon::Polygon(const Impl& pImpl)
+    : m_pImpl(std::make_unique<Impl>(pImpl)) {}
 
 Polygon::Polygon(const Polygon& polygon)
     : m_pImpl(std::make_unique<Impl>(*polygon.m_pImpl)) {}
@@ -120,35 +124,33 @@ bool Polygon::unite(const Polygon& polygon)
     Polygon_with_holes_2 result;
 
 
-    bRet = CGAL::join(m_pImpl->m_polygon, polygon.m_pImpl->m_polygon, result);
+    bRet = CGAL::join(m_pImpl->polygon(), polygon.m_pImpl->polygon(), result);
 
 
     if (bRet)
-        m_pImpl = std::make_unique<Impl>(Impl{result});
+        m_pImpl = std::make_unique<Impl>(result);
 
     return bRet;
 }
 
 Polygon Polygon::united(const Polygon& polygon) const
 {
-    Polygon_with_holes_2 result;
-
-    CGAL::join(m_pImpl->m_polygon, polygon.m_pImpl->m_polygon, result);
-
-    return Polygon(std::make_unique<Impl>(Impl{result}));
+    Polygon result;
+    CGAL::join(m_pImpl->polygon(), polygon.m_pImpl->polygon(), result.m_pImpl->polygon());
+    return result;
 }
 
 PolygonSet Polygon::subtracted(const Polygon& polygon) const
 {
     std::list<Polygon_with_holes_2> result;
 
-    CGAL::difference(m_pImpl->m_polygon, polygon.m_pImpl->m_polygon,
+    CGAL::difference(m_pImpl->polygon(), polygon.m_pImpl->polygon(),
                      std::back_inserter(result));
 
     PolygonSet s;
     for (const auto& r : result)
     {
-        s.insert(Polygon(std::make_unique<Impl>(Impl{r})));
+        s.insert(Polygon(r));
     }
 
     return s;
@@ -158,13 +160,13 @@ PolygonSet Polygon::intersected(const Polygon& polygon) const
 {
     std::list<Polygon_with_holes_2> result;
 
-    CGAL::intersection(m_pImpl->m_polygon, polygon.m_pImpl->m_polygon,
+    CGAL::intersection(m_pImpl->polygon(), polygon.m_pImpl->polygon(),
                        std::back_inserter(result));
 
     PolygonSet s;
     for (const auto& r : result)
     {
-        s.insert(Polygon(std::make_unique<Impl>(Impl{r})));
+        s.insert(Polygon(r));
     }
 
     return s;
@@ -172,22 +174,22 @@ PolygonSet Polygon::intersected(const Polygon& polygon) const
 
 Polygon Polygon::minkowskiSum(const Polygon& polygon) const
 {
-    const Polygon_with_holes_2& P = m_pImpl->m_polygon;
-    const Polygon_with_holes_2& Q = polygon.m_pImpl->m_polygon;
+    const Polygon_with_holes_2& P = m_pImpl->polygon();
+    const Polygon_with_holes_2& Q = polygon.m_pImpl->polygon();
     assert(P.outer_boundary().orientation() == CGAL::Sign::COUNTERCLOCKWISE);
     assert(Q.outer_boundary().orientation() == CGAL::Sign::COUNTERCLOCKWISE);
     
-    return Polygon(std::make_unique<Impl>(Impl{CGAL::minkowski_sum_2(P, Q)}));
+    return Polygon(CGAL::minkowski_sum_2(P, Q));
 }
 
 QPolygonF Polygon::toPolygon(bool ignoreHoles) const
 {
-    auto outer = m_pImpl->m_polygon.outer_boundary();
+    auto outer = m_pImpl->polygon().outer_boundary();
     QPolygonF result = toQPolygonF(outer.vertices_begin(), outer.vertices_end());
 
     if (!ignoreHoles)
     {
-        for (auto it = m_pImpl->m_polygon.holes_begin(); it != m_pImpl->m_polygon.holes_end(); ++it)
+        for (auto it = m_pImpl->polygon().holes_begin(); it != m_pImpl->polygon().holes_end(); ++it)
         {
             result = result.subtracted(toQPolygonF(it->vertices_begin(), it->vertices_end()));
         }
@@ -199,13 +201,13 @@ QPolygonF Polygon::toPolygon(bool ignoreHoles) const
 QPainterPath Polygon::toPath(bool ignoreHoles) const
 {
     QPainterPath path;
-    auto outer = m_pImpl->m_polygon.outer_boundary();
+    auto outer = m_pImpl->polygon().outer_boundary();
     path.addPolygon(toQPolygonF(outer.vertices_begin(), outer.vertices_end()));
     path.closeSubpath();
 
     if (!ignoreHoles)
     {
-        for (auto it = m_pImpl->m_polygon.holes_begin(); it != m_pImpl->m_polygon.holes_end(); ++it)
+        for (auto it = m_pImpl->polygon().holes_begin(); it != m_pImpl->polygon().holes_end(); ++it)
         {
             QPainterPath inner;
             inner.addPolygon(toQPolygonF(it->vertices_begin(), it->vertices_end()));
@@ -222,7 +224,7 @@ std::vector<QPointF> Polygon::points() const
 {
     std::vector<QPointF> result;
 
-    auto outer = m_pImpl->m_polygon.outer_boundary();
+    auto outer = m_pImpl->polygon().outer_boundary();
 
     for (auto& point : outer)
     {
@@ -236,7 +238,7 @@ std::vector<std::vector<QPointF>> Polygon::holes() const
 {
     std::vector<std::vector<QPointF>> holes;
 
-    for (auto it = m_pImpl->m_polygon.holes_begin(); it != m_pImpl->m_polygon.holes_end(); ++it)
+    for (auto it = m_pImpl->polygon().holes_begin(); it != m_pImpl->polygon().holes_end(); ++it)
     {
         holes.push_back(std::vector<QPointF>());
         for (auto& point : *it)
@@ -250,7 +252,7 @@ std::vector<std::vector<QPointF>> Polygon::holes() const
 
 QRectF Polygon::bounds() const
 {
-    return toQRectF(m_pImpl->m_polygon.bbox());
+    return toQRectF(m_pImpl->polygon().bbox());
 }
 
 bool Polygon::inside(const QPointF& point, bool bStrict) const
@@ -262,7 +264,7 @@ bool Polygon::inside(const QPointF& point, bool bStrict) const
 
     const Point_2 mpoint = Point_2(point.x(), point.y());
 
-    auto outer = m_pImpl->m_polygon.outer_boundary();
+    auto outer = m_pImpl->polygon().outer_boundary();
 
     switch (CGAL::bounded_side_2(outer.vertices_begin(), outer.vertices_end(), mpoint, Kernel()))
     {
@@ -277,8 +279,8 @@ bool Polygon::inside(const QPointF& point, bool bStrict) const
         // now need to check if point inside holes
     }
 
-    for (auto holesIter = m_pImpl->m_polygon.holes_begin(); 
-          holesIter != m_pImpl->m_polygon.holes_end(); ++holesIter)
+    for (auto holesIter = m_pImpl->polygon().holes_begin(); 
+          holesIter != m_pImpl->polygon().holes_end(); ++holesIter)
     {
         auto hole = *holesIter;
 
@@ -302,7 +304,7 @@ bool Polygon::intersects(const QLineF& line, bool bStrict, std::vector<QPointF>*
 {
     boost::geometry::model::polygon<point_xy> polygon;
 
-    auto outer = m_pImpl->m_polygon.outer_boundary();
+    auto outer = m_pImpl->polygon().outer_boundary();
 
     for (auto it = outer.begin(); it != outer.end(); ++it)
     {
@@ -311,7 +313,7 @@ bool Polygon::intersects(const QLineF& line, bool bStrict, std::vector<QPointF>*
 
     polygon.outer().push_back(*polygon.outer().begin());
 
-    for (auto IT = m_pImpl->m_polygon.holes_begin(); IT != m_pImpl->m_polygon.holes_end(); ++IT)
+    for (auto IT = m_pImpl->polygon().holes_begin(); IT != m_pImpl->polygon().holes_end(); ++IT)
     {
         polygon.inners().push_back({});
         for (auto it = IT->vertices_begin(); it != IT->vertices_end(); ++it)
@@ -356,13 +358,13 @@ bool Polygon::isSimple() const
 {
     try
     {
-        if (m_pImpl->m_polygon.has_holes())
+        if (m_pImpl->polygon().has_holes())
         {
             return false;
         }
         else
         {
-            return m_pImpl->m_polygon.outer_boundary().is_simple();
+            return m_pImpl->polygon().outer_boundary().is_simple();
         }
     }
     catch (...)
