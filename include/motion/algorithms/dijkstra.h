@@ -1,6 +1,6 @@
 #pragma once
 
-#include "motion/structures/Graph.h"
+#include "motion/structures/graph.h"
 
 namespace Motion
 {

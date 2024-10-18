@@ -1,23 +1,20 @@
-#include "motion/algorithms/Dijkstra.h"
-
+#include "motion/algorithms/dijkstra.h"
 #include "motion/algorithms/utils.h"
 
 #include <boost/config.hpp>
-
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
-
-using namespace boost;
 
 namespace Motion
 {
 
 Path dijkstraShortestPath(int source, int destination, const Graph& graph)
 {
-    typedef adjacency_list<listS, vecS, directedS, no_property, property <edge_weight_t, qreal>> graph_t;
-    typedef graph_traits<graph_t>::vertex_descriptor vertex_descriptor;
-    typedef graph_traits<graph_t>::edge_descriptor edge_descriptor;
+    typedef boost::adjacency_list<boost::listS, boost::vecS, boost::directedS, boost::no_property,
+                                  boost::property<boost::edge_weight_t, qreal>> graph_t;
+    typedef boost::graph_traits<graph_t>::vertex_descriptor vertex_descriptor;
+    typedef boost::graph_traits<graph_t>::edge_descriptor edge_descriptor;
     typedef std::pair<int, int> Edge;
 
     std::vector<QPointF> vertices = graph.getVertices();
@@ -56,7 +53,7 @@ Path dijkstraShortestPath(int source, int destination, const Graph& graph)
     std::vector<int> d(num_vertices(g));
     vertex_descriptor s = vertex(source, g);
 
-    dijkstra_shortest_paths(g, s, predecessor_map(&p[0]).distance_map(&d[0]));
+    boost::dijkstra_shortest_paths(g, s, boost::predecessor_map(&p[0]).distance_map(&d[0]));
 
     delete edge_array;
     delete weights;
@@ -67,7 +64,7 @@ Path dijkstraShortestPath(int source, int destination, const Graph& graph)
     }
 
     Path path;
-    graph_traits< graph_t >::vertex_descriptor current = destination;
+    boost::graph_traits<graph_t>::vertex_descriptor current = destination;
 
     while (current != source)
     {
