@@ -1,23 +1,28 @@
 #pragma once
 
+#include "motion/configuration_space.h"
+#include "motion/device_graphics_item.h"
+#include "motion/path_finder.h"
 #include "motion/states/state.h"
+#include "motion/structures/polygon.h"
 
 #include <QGraphicsView>
-#include <QGraphicsPolygonItem>
-#include <QGraphicsItemGroup>
-#include <QMouseEvent>
-
-#include "motion/vision.h"
-#include "motion/path_finder.h"
-#include "motion/device_graphics_item.h"
-#include "motion/configuration_space.h"
-#include "motion/structures/polygon.h"
-#include "motion/algorithms/find_methods/find_method.h"
 
 #include <memory>
 
+class QGraphicsItemGroup;
+
 namespace Motion
 {
+
+class IFindMethod;
+class Vision;
+class IdleState;
+class CreateState;
+class ReshapeState;
+class IPathFinder;
+class VisionPathFinder;
+class RegularPathFinder;
 
 class DisplayView : public QGraphicsView
 {

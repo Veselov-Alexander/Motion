@@ -1,7 +1,8 @@
 #pragma once
 
-#include <QDialog>
 #include "motion/ui_about_dialog.h"
+
+#include <QDialog>
 
 namespace Motion
 {

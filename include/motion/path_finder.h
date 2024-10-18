@@ -1,6 +1,7 @@
 #pragma once
 
 #include "motion/algorithms/find_methods/find_method.h"
+#include "motion/structures/polygon.h"
 
 namespace Motion
 {

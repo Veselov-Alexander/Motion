@@ -1,7 +1,9 @@
 #pragma once
 
 #include "motion/structures/polygon.h"
-#include "motion/device_graphics_item.h"
+
+#include <QGraphicsItemGroup>
+#include <QGraphicsPolygonItem>
 
 #include <vector>
 

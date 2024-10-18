@@ -1,9 +1,9 @@
 #include "motion/file_manager.h"
+#include "motion/display_view.h"
 
 #include <QXmlStreamWriter>
 #include <QMessageBox>
-
-#include "motion/display_view.h"
+#include <QFile>
 
 namespace Motion
 {

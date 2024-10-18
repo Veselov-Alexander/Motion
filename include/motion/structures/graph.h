@@ -1,11 +1,11 @@
 #pragma once
 
-#include <QPointF>
-#include <QGraphicsPathItem>
-
 #include "motion/algorithms/find_methods/find_method.h"
 
+#include <QPointF>
 #include <vector>
+
+class QGraphicsPathItem;
 
 namespace Motion
 {

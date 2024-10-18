@@ -1,6 +1,7 @@
 #include "motion/app_window.h"
 
 #include "motion/display_view.h"
+#include "motion/about_dialog.h"
 #include "motion/states/idle_state.h"
 #include "motion/states/create_state.h"
 #include "motion/states/reshape_state.h"

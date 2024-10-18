@@ -16,7 +16,7 @@
 
 namespace
 {
-    typedef CGAL::Exact_predicates_exact_constructions_kernel   Kernel;;
+    typedef CGAL::Exact_predicates_exact_constructions_kernel   Kernel;
     typedef Kernel::Point_2                                     Point_2;
     typedef Kernel::Segment_2                                   Segment_2;
     typedef CGAL::Polygon_2<Kernel>                             Polygon_2;

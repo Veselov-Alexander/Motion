@@ -1,11 +1,12 @@
 #include "motion/algorithms/utils.h"
+#include "motion/display_view.h"
 
+#include <QVector2D>
 #include <CGAL/Boolean_set_operations_2.h>
 #include <CGAL/Vector_2.h>
 
 #include <math.h>
 
-#include "motion/display_view.h"
 
 namespace Motion
 {

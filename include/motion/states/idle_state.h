@@ -1,11 +1,6 @@
 #pragma once
 
 #include "motion/states/state.h"
-#include "motion/algorithms/find_methods/find_method.h"
-
-#include <QtMath>
-
-#include <memory>
 
 namespace Motion
 {
@@ -13,10 +8,10 @@ namespace Motion
 class IdleState : public IState
 {
 public:
-    virtual void wheelEvent(QWheelEvent* pWheelEvent) override;
-    virtual void mousePressEvent(QMouseEvent* pWheelEvent) override;
-    virtual void mouseReleaseEvent(QMouseEvent* pWheelEvent) override;
-    virtual void finish() override { }
+    void wheelEvent(QWheelEvent* pWheelEvent) override;
+    void mousePressEvent(QMouseEvent* pWheelEvent) override;
+    void mouseReleaseEvent(QMouseEvent* pWheelEvent) override;
+    void finish() override { }
 private:
     void zoomEvent(QWheelEvent* pWheelEvent);
     void dragEvent(QMouseEvent* pMouseEvent);

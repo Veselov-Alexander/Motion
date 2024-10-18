@@ -1,14 +1,15 @@
 #pragma once
 
 #include <QPointF>
-#include <QLineF>
-#include <QGraphicsPathItem>
-#include "motion/structures/polygon.h"
-
 #include <vector>
+
+class QGraphicsPathItem;
 
 namespace Motion
 {
+
+class Polygon;
+class PolygonSet;
 
 typedef std::vector<QPointF> Path;
 
@@ -23,10 +24,7 @@ struct IFindMethod
     ) = 0;
 
     virtual QGraphicsPathItem* getPathMap() = 0;
-
-    void setMask(const Polygon& polygon) { m_mask = polygon; };
-protected:
-    std::optional<Polygon> m_mask = std::nullopt;
+    virtual void setMask(const Polygon& polygon) = 0;
 };
 
 }  // namespace Motion

@@ -91,4 +91,9 @@ void PreprocessedGraph::addPoint(const QPointF& point)
     m_points.push_back(point);
 }
 
+void PreprocessedGraph::setMask(const Polygon& polygon)
+{
+    m_mask = polygon;
+}
+
 }  // namespace Motion

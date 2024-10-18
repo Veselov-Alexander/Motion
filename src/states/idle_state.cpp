@@ -1,8 +1,7 @@
-#include "motion/states/Idle_state.h"
+#include "motion/states/idle_state.h"
+#include "motion/display_view.h"
 
-#include "motion/display_view.h"
-#include "motion/display_view.h"
-#include "motion/algorithms/find_methods/RRT.h"
+#include <QMouseEvent>
 
 namespace Motion
 {
@@ -52,7 +51,7 @@ void IdleState::zoomEvent(QWheelEvent* pWheelEvent)
     DisplayView* pDisplayView = DisplayView::getInstance();
 
     double angle = pWheelEvent->angleDelta().y();
-    double factor = qPow(1.0015, angle);
+    double factor = std::pow(1.0015, angle);
 
     qreal zoom = pDisplayView->transform().scale(factor, factor).mapRect(QRectF(0, 0, 1, 1)).width();
 

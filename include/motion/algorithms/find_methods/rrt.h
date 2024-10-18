@@ -13,13 +13,16 @@ public:
         int nMaxIterations=10000, int nMaxDistance=50,
         double biasProb = 0.05);
 
-    virtual Path findPath(
+    Path findPath(
         const QPointF& startPoint,
         const QPointF& endPoint,
         const PolygonSet& obstacles
     ) override;
 
-    virtual QGraphicsPathItem* getPathMap() override;
+    QGraphicsPathItem* getPathMap() override;
+
+    void setMask(const Polygon& polygon) override;
+
 private:
     QPointF generatePoint(const QPointF& end);
     QPointF cropLine(const QPointF& start, const QPointF& end);

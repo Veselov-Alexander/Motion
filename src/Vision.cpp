@@ -1,19 +1,18 @@
 #include "motion/vision.h"
-
-#include "motion/display_view.h"
 #include "motion/algorithms/convex_hull.h"
+#include "motion/algorithms/utils.h"
+#include "motion/display_view.h"
 
 #include <QGraphicsEllipseItem>
-#include <QGraphicsRectItem>
 #include <QGraphicsPolygonItem>
+#include <QGraphicsRectItem>
 #include <QPainter>
 #include <QVector>
+#include <QVector2D>
 
 #include <functional>
 #include <execution>
 #include <mutex>
-
-#include "motion/algorithms/utils.h"
 
 namespace Motion
 {

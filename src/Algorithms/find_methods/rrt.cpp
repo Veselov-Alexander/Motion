@@ -89,4 +89,9 @@ QGraphicsPathItem* RRT::getPathMap()
     return m_tree.asGraphicsItems();
 }
 
+void RRT::setMask(const Polygon& polygon)
+{
+  // Not needed
+}
+
 }  // namespace Motion

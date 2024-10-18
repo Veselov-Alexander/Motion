@@ -1,9 +1,8 @@
 #include "motion/device_graphics_item.h"
-
-#include <QBrush>s
-
 #include "motion/algorithms/utils.h"
 #include "motion/display_view.h"
+
+#include <QBrush>
 
 namespace Motion
 {

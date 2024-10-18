@@ -1,13 +1,15 @@
 #pragma once
 
-#include <QtWidgets/QMainWindow>
 #include "motion/ui_app_window.h"
 
-#include "motion/generate/generate.h"
-#include "motion/about_dialog.h"
+#include <QtWidgets/QMainWindow>
 
 namespace Motion
 {
+
+class IState;
+class Generate;
+class AboutDialog;
 
 class AppWindow : public QMainWindow
 {

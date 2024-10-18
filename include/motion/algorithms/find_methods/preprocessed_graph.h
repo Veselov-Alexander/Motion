@@ -4,20 +4,23 @@
 #include "motion/structures/polygon.h"
 #include "motion/algorithms/find_methods/find_method.h"
 
+#include <optional>
+
 namespace Motion
 {
 
 class PreprocessedGraph : public IFindMethod
 {
 public:
-    virtual Path findPath(
+    Path findPath(
         const QPointF& startPoint,
         const QPointF& endPoint,
         const PolygonSet& obstacles
     ) override;
 
-    virtual QGraphicsPathItem* getPathMap() override;
-protected:
+    QGraphicsPathItem* getPathMap() override;
+    void setMask(const Polygon& polygon) override;
+   protected:
     virtual void createGraph(const PolygonSet& obstacles) = 0;
     void addPoint(const QPointF& point);
 protected:
@@ -27,6 +30,7 @@ protected:
     std::vector<QPointF> m_points;
     std::vector<std::vector<size_t>> m_indexes;
     std::vector<std::pair<size_t, QPointF>> m_specialPoints;
+    std::optional<Polygon> m_mask;
     size_t m_nObstacleCount = 0;
 };
 

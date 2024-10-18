@@ -1,6 +1,7 @@
 #pragma once
 
-#include <QMouseEvent>
+class QMouseEvent;
+class QWheelEvent;
 
 namespace Motion
 {

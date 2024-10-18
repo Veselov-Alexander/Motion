@@ -1,14 +1,12 @@
 #include "motion/states/create_state.h"
-
-#include "motion/display_view.h"
-
 #include "motion/algorithms/utils.h"
+#include "motion/display_view.h"
 #include "motion/structures/polygon.h"
 
 #include <QGraphicsEllipseItem>
-#include <QMessageBox>
-
 #include <QGuiApplication>
+#include <QMessageBox>
+#include <QMouseEvent>
 
 namespace Motion
 {
