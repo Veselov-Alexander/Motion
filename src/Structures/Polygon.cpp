@@ -29,6 +29,7 @@ inline QPointF toQPointF(const Point_2& point)
                    CGAL::to_double(point.y()));
 }
 
+typedef CGAL::Polygon_2<Kernel> Polygon_2;
 inline QPolygonF toQPolygonF(const Polygon_2::Vertex_iterator begin, const Polygon_2::Vertex_iterator end)
 {
     QPolygonF result;
@@ -55,11 +56,11 @@ inline bool insideRect(const QPointF& point, const QRectF& rect)
 
 Polygon::Polygon() {}
 
-Polygon::Polygon(const QPolygonF& polygon, bool withHoles)
-    : m_bWithHoles(withHoles), m_boundsRect(boundsRect(polygon))
+Polygon::Polygon(const QPolygonF& polygon)
+    : m_boundsRect(boundsRect(polygon))
 {
     try {
-        auto& points = withHoles ? m_polygonWithHoles.outer_boundary() : m_polygon;
+        auto& points = m_polygonWithHoles.outer_boundary();
 
         for (int i = 0; i < polygon.size(); ++i)
         {
@@ -77,13 +78,8 @@ Polygon::Polygon(const QPolygonF& polygon, bool withHoles)
     catch (...) {}
 }
 
-Polygon::Polygon(const Polygon_2& polygon)
-    : m_polygon(polygon), m_bWithHoles(false), m_boundsRect(toQRectF(polygon.bbox()))
-{
-}
-
 Polygon::Polygon(const Polygon_with_holes_2& polygon)
-    : m_polygonWithHoles(polygon), m_bWithHoles(true), m_boundsRect(toQRectF(polygon.bbox()))
+    : m_polygonWithHoles(polygon), m_boundsRect(toQRectF(polygon.bbox()))
 {
 }
 
@@ -117,27 +113,13 @@ bool Polygon::unite(const Polygon& polygon)
 
     Polygon_with_holes_2 result;
 
-    if (!m_bWithHoles && !polygon.m_bWithHoles)
-    {
-        bRet = CGAL::join(m_polygon, polygon.m_polygon, result);
-    }
-    else if (m_bWithHoles && polygon.m_bWithHoles)
-    {
-        bRet = CGAL::join(m_polygonWithHoles, polygon.m_polygonWithHoles, result);
-    }
-    else if (!m_bWithHoles && polygon.m_bWithHoles)
-    {
-        bRet = CGAL::join(m_polygon, polygon.m_polygonWithHoles, result);
-    }
-    else // if (bWithHoles && !polygon.bWithHoles)
-    {
-        bRet = CGAL::join(m_polygonWithHoles, polygon.m_polygon, result);
-    }
+
+    bRet = CGAL::join(m_polygonWithHoles, polygon.m_polygonWithHoles, result);
+
 
     if (bRet)
         m_polygonWithHoles = result;
 
-    m_bWithHoles = true;
     m_boundsRect = boundsRect(toQRectF(m_polygonWithHoles.bbox()));
 
     return bRet;
@@ -147,22 +129,7 @@ Polygon Polygon::united(const Polygon& polygon) const
 {
     Polygon_with_holes_2 result;
 
-    if (!m_bWithHoles && !polygon.m_bWithHoles)
-    {
-        CGAL::join(m_polygon, polygon.m_polygon, result);
-    }
-    else if (m_bWithHoles && polygon.m_bWithHoles)
-    {
-        CGAL::join(m_polygonWithHoles, polygon.m_polygonWithHoles, result);
-    }
-    else if(!m_bWithHoles && polygon.m_bWithHoles)
-    {
-        CGAL::join(m_polygon, polygon.m_polygonWithHoles, result);
-    }
-    else if (m_bWithHoles && !polygon.m_bWithHoles)
-    {
-        CGAL::join(m_polygonWithHoles, polygon.m_polygon, result);
-    }
+    CGAL::join(m_polygonWithHoles, polygon.m_polygonWithHoles, result);
 
     return Polygon(result);
 }
@@ -171,22 +138,7 @@ PolygonSet Polygon::subtracted(const Polygon& polygon) const
 {
     std::list<Polygon_with_holes_2> result;
 
-    if (!m_bWithHoles && !polygon.m_bWithHoles)
-    {
-        CGAL::difference(m_polygon, polygon.m_polygon, std::back_inserter(result));
-    }
-    else if (m_bWithHoles && polygon.m_bWithHoles)
-    {
-        CGAL::difference(m_polygonWithHoles, polygon.m_polygonWithHoles, std::back_inserter(result));
-    }
-    else if (!m_bWithHoles && polygon.m_bWithHoles)
-    {
-        CGAL::difference(m_polygon, polygon.m_polygonWithHoles, std::back_inserter(result));
-    }
-    else if (m_bWithHoles && !polygon.m_bWithHoles)
-    {
-        CGAL::difference(m_polygonWithHoles, polygon.m_polygon, std::back_inserter(result));
-    }
+    CGAL::difference(m_polygonWithHoles, polygon.m_polygonWithHoles, std::back_inserter(result));
 
     PolygonSet s;
     for (auto r : result)
@@ -201,22 +153,7 @@ PolygonSet Polygon::intersected(const Polygon& polygon) const
 {
     std::list<Polygon_with_holes_2> result;
 
-    if (!m_bWithHoles && !polygon.m_bWithHoles)
-    {
-        CGAL::intersection(m_polygon, polygon.m_polygon, std::back_inserter(result));
-    }
-    else if (m_bWithHoles && polygon.m_bWithHoles)
-    {
-        CGAL::intersection(m_polygonWithHoles, polygon.m_polygonWithHoles, std::back_inserter(result));
-    }
-    else if (!m_bWithHoles && polygon.m_bWithHoles)
-    {
-        CGAL::intersection(m_polygon, polygon.m_polygonWithHoles, std::back_inserter(result));
-    }
-    else if (m_bWithHoles && !polygon.m_bWithHoles)
-    {
-        CGAL::intersection(m_polygonWithHoles, polygon.m_polygon, std::back_inserter(result));
-    }
+    CGAL::intersection(m_polygonWithHoles, polygon.m_polygonWithHoles, std::back_inserter(result));
 
     PolygonSet s;
     for (auto r : result)
@@ -229,21 +166,12 @@ PolygonSet Polygon::intersected(const Polygon& polygon) const
 
 Polygon Polygon::minkowskiSum(const Polygon& polygon) const
 {
-    if (!m_bWithHoles && !polygon.m_bWithHoles)
-    {
-        const Polygon_2& P = m_polygon;
-        const Polygon_2& Q = polygon.m_polygon;
+    const Polygon_with_holes_2& P = m_polygonWithHoles;
+    const Polygon_with_holes_2& Q = polygon.m_polygonWithHoles;
+    assert(P.outer_boundary().orientation() == CGAL::Sign::COUNTERCLOCKWISE);
+    assert(Q.outer_boundary().orientation() == CGAL::Sign::COUNTERCLOCKWISE);
 
-        assert(P.orientation() == CGAL::Sign::COUNTERCLOCKWISE);
-        assert(Q.orientation() == CGAL::Sign::COUNTERCLOCKWISE);
-
-        return Polygon(CGAL::minkowski_sum_2(P, Q));
-    }
-    else
-    {
-        assert(!"Not implemented");
-        return Polygon(QPolygonF());
-    }
+    return Polygon(CGAL::minkowski_sum_2(P, Q));
 }
 
 QPolygonF Polygon::toPolygon(bool ignoreHoles) const
@@ -288,21 +216,11 @@ std::vector<QPointF> Polygon::points() const
 {
     std::vector<QPointF> result;
 
-    if (m_bWithHoles)
-    {
-        auto outer = m_polygonWithHoles.outer_boundary();
+    auto outer = m_polygonWithHoles.outer_boundary();
 
-        for (auto& point : outer)
-        {
-            result.push_back(toQPointF(point));
-        }
-    }
-    else
+    for (auto& point : outer)
     {
-        for (auto& point : m_polygon)
-        {
-            result.push_back(toQPointF(point));
-        }
+        result.push_back(toQPointF(point));
     }
 
     return result;
@@ -312,15 +230,12 @@ std::vector<std::vector<QPointF>> Polygon::holes() const
 {
     std::vector<std::vector<QPointF>> holes;
 
-    if (m_bWithHoles)
+    for (auto it = m_polygonWithHoles.holes_begin(); it != m_polygonWithHoles.holes_end(); ++it)
     {
-        for (auto it = m_polygonWithHoles.holes_begin(); it != m_polygonWithHoles.holes_end(); ++it)
+        holes.push_back(std::vector<QPointF>());
+        for (auto& point : *it)
         {
-            holes.push_back(std::vector<QPointF>());
-            for (auto& point : *it)
-            {
-                holes.back().push_back(toQPointF(point));
-            }
+            holes.back().push_back(toQPointF(point));
         }
     }
 
@@ -341,54 +256,36 @@ bool Polygon::inside(const QPointF& point, bool bStrict) const
 
     const Point_2 mpoint = Point_2(point.x(), point.y());
 
-    if (m_bWithHoles)
+    auto outer = m_polygonWithHoles.outer_boundary();
+
+    switch (CGAL::bounded_side_2(outer.vertices_begin(), outer.vertices_end(), mpoint, Kernel()))
     {
-        auto outer = m_polygonWithHoles.outer_boundary();
-
-        switch (CGAL::bounded_side_2(outer.vertices_begin(), outer.vertices_end(), mpoint, Kernel()))
-        {
-        case CGAL::ON_UNBOUNDED_SIDE:
+    case CGAL::ON_UNBOUNDED_SIDE:
+        return false;
+    case CGAL::ON_BOUNDARY:
+        if (bStrict)
             return false;
-        case CGAL::ON_BOUNDARY:
-            if (bStrict)
-                return false;
-        case CGAL::ON_BOUNDED_SIDE:
-            break;
-            // point is inside outer
-            // now need to check if point inside holes
-        }
-
-        for (auto holesIter = m_polygonWithHoles.holes_begin(); 
-             holesIter != m_polygonWithHoles.holes_end(); ++holesIter)
-        {
-            auto hole = *holesIter;
-
-            switch (CGAL::bounded_side_2(hole.vertices_begin(), hole.vertices_end(), mpoint, Kernel()))
-            {
-            case CGAL::ON_BOUNDED_SIDE:
-                // point in inside hole
-                // therefore, the point is not in polygon
-                if (bStrict)
-                    return false;
-            case CGAL::ON_UNBOUNDED_SIDE:
-            case CGAL::ON_BOUNDARY:
-                break;
-            }
-        }
+    case CGAL::ON_BOUNDED_SIDE:
+        break;
+        // point is inside outer
+        // now need to check if point inside holes
     }
-    else
+
+    for (auto holesIter = m_polygonWithHoles.holes_begin(); 
+          holesIter != m_polygonWithHoles.holes_end(); ++holesIter)
     {
-        switch (CGAL::bounded_side_2(m_polygon.vertices_begin(), m_polygon.vertices_end(), mpoint, Kernel()))
+        auto hole = *holesIter;
+
+        switch (CGAL::bounded_side_2(hole.vertices_begin(), hole.vertices_end(), mpoint, Kernel()))
         {
-        case CGAL::ON_UNBOUNDED_SIDE:
-            return false;
-        case CGAL::ON_BOUNDARY:
+        case CGAL::ON_BOUNDED_SIDE:
+            // point in inside hole
+            // therefore, the point is not in polygon
             if (bStrict)
                 return false;
-        case CGAL::ON_BOUNDED_SIDE:
+        case CGAL::ON_UNBOUNDED_SIDE:
+        case CGAL::ON_BOUNDARY:
             break;
-            // point is inside outer
-            // now need to check if point inside holes
         }
     }
 
@@ -397,8 +294,6 @@ bool Polygon::inside(const QPointF& point, bool bStrict) const
 
 bool Polygon::intersects(const QLineF& line, bool bStrict, std::vector<QPointF>* out) const
 {
-    assert(m_bWithHoles);
-
     boost::geometry::model::polygon<point_xy> polygon;
 
     auto outer = m_polygonWithHoles.outer_boundary();
@@ -455,13 +350,13 @@ bool Polygon::isSimple() const
 {
     try
     {
-        if (m_bWithHoles)
+        if (m_polygonWithHoles.has_holes())
         {
             return false;
         }
         else
         {
-            return m_polygon.is_simple();
+            return m_polygonWithHoles.outer_boundary().is_simple();
         }
     }
     catch (...)

@@ -170,7 +170,7 @@ void Vision::update(QPointF pos)
         DisplayView* pDisplayView = DisplayView::getInstance();
         m_obstacles = pDisplayView->getObstacles();
         for (const auto& obs : m_obstacles)
-            m_obss.insert(Polygon(obs, true));
+            m_obss.insert(Polygon(obs));
     }
 
 

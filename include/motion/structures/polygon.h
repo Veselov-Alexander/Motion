@@ -19,9 +19,7 @@ namespace
     typedef CGAL::Exact_predicates_exact_constructions_kernel   Kernel;
     typedef Kernel::Point_2                                     Point_2;
     typedef Kernel::Segment_2                                   Segment_2;
-    typedef CGAL::Polygon_2<Kernel>                             Polygon_2;
     typedef CGAL::Polygon_with_holes_2<Kernel>                  Polygon_with_holes_2;
-    typedef Polygon_2::Vertex_iterator                          Iterator_2;
 }
 
 namespace Motion
@@ -33,7 +31,7 @@ class Polygon
 {
 public:
     Polygon();
-    explicit Polygon(const QPolygonF& polygon, bool withHoles = false);
+    explicit Polygon(const QPolygonF& polygon);
     bool inside(const QPointF& point, bool bStrict = true) const;
     bool intersects(const QLineF& line, bool bStrict = false, std::vector<QPointF>* out = nullptr) const;
     bool isSimple() const;
@@ -48,15 +46,11 @@ public:
     std::vector<std::vector<QPointF>> holes() const;
     QRectF bounds() const;
 private:
-    explicit Polygon(const Polygon_2& polygon);
     explicit Polygon(const Polygon_with_holes_2& polygon);
     QRectF boundsRect(const QPolygonF& polygon);
-    bool intersectsPolygon_2(const Segment_2& segment, const Polygon_2& polygon, bool bStrict = false) const;
 private:
-    Polygon_2 m_polygon;
     Polygon_with_holes_2 m_polygonWithHoles;
     QRectF m_boundsRect;
-    bool m_bWithHoles;
 };
 
 
