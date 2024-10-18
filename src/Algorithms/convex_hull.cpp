@@ -1,23 +1,17 @@
 #include "motion/algorithms/convex_hull.h"
+#include "motion/display_view.h"
 
 #include <CGAL/convex_hull_2.h>
 #include <CGAL/Convex_hull_traits_adapter_2.h>
-#include "motion/display_view.h"
-#include <QRectF>
-
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Polygon_2.h>
-#include <CGAL/Polygon_with_holes_2.h>
-#include <CGAL/Vector_2.h>
+#include <QRectF>
 
 namespace Motion
 {
 
 typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
 typedef Kernel::Point_2 Point_2;
-typedef Kernel::Segment_2 Segment_2;
-typedef CGAL::Polygon_with_holes_2<Kernel> Polygon_with_holes_2;
-
 typedef CGAL::Convex_hull_traits_adapter_2<Kernel, CGAL::Pointer_property_map<Point_2>::type > Convex_hull_traits_2;
 
 QPolygonF convexHull(const std::vector<QPointF>& pts)
