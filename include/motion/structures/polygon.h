@@ -1,7 +1,5 @@
 #pragma once
 
-#include <QRect>
-
 #include <vector>
 #include <memory>
 
@@ -9,6 +7,7 @@ class QPainterPath;
 class QPolygonF;
 class QPointF;
 class QLineF;
+class QRectF;
 
 namespace Motion
 {
@@ -39,11 +38,8 @@ public:
     Polygon& operator=(const Polygon& polygon);
 private:
     class Impl;
-    QRectF boundsRect(const QPolygonF& polygon);
-    Polygon(std::unique_ptr<Impl>&& pImpl);
-private:
     std::unique_ptr<Impl> m_pImpl;
-    QRectF m_boundsRect;
+    Polygon(std::unique_ptr<Impl>&& pImpl);
 };
 
 class PolygonSet

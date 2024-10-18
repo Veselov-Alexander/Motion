@@ -82,12 +82,11 @@ Polygon::~Polygon() = default;
 Polygon& Polygon::operator=(const Polygon& polygon)
 {
     m_pImpl = std::make_unique<Impl>(*polygon.m_pImpl);
-    m_boundsRect = polygon.m_boundsRect;
     return *this;
 }
 
 Polygon::Polygon(const QPolygonF& polygon)
-    : m_boundsRect(boundsRect(polygon)), m_pImpl(std::make_unique<Impl>())
+    : m_pImpl(std::make_unique<Impl>())
 {
     try {
         auto& points = m_pImpl->m_polygon.outer_boundary();
@@ -109,36 +108,10 @@ Polygon::Polygon(const QPolygonF& polygon)
 }
 
 Polygon::Polygon(std::unique_ptr<Impl>&& pImpl)
-    : m_pImpl(std::move(pImpl)),
-      m_boundsRect(toQRectF(m_pImpl->m_polygon.bbox())) {}
+    : m_pImpl(std::move(pImpl)) {}
 
 Polygon::Polygon(const Polygon& polygon)
-    : m_pImpl(std::make_unique<Impl>(*polygon.m_pImpl)),
-      m_boundsRect(toQRectF(polygon.m_pImpl->m_polygon.bbox())) {}
-
-QRectF Polygon::boundsRect(const QPolygonF& polygon)
-{
-    if (polygon.isEmpty())
-        return {};
-
-    qreal xmin, xmax, ymin, ymax;
-
-    xmin = xmax = polygon[0].x();
-    ymin = ymax = polygon[0].y();
-
-    for (int i = 1; i < polygon.size(); ++i)
-    {
-        const qreal x = polygon[i].x();
-        const qreal y = polygon[i].y();
-
-        xmin = std::min(xmin, x);
-        xmax = std::max(xmax, x);
-        ymin = std::min(ymin, y);
-        ymax = std::max(ymax, y);
-    }
-
-    return QRectF(QPointF(xmin, ymin), QPointF(xmax, ymax));
-}
+    : m_pImpl(std::make_unique<Impl>(*polygon.m_pImpl)) {}
 
 bool Polygon::unite(const Polygon& polygon)
 {
@@ -152,8 +125,6 @@ bool Polygon::unite(const Polygon& polygon)
 
     if (bRet)
         m_pImpl = std::make_unique<Impl>(Impl{result});
-
-    m_boundsRect = boundsRect(toQRectF(m_pImpl->m_polygon.bbox()));
 
     return bRet;
 }
@@ -279,12 +250,12 @@ std::vector<std::vector<QPointF>> Polygon::holes() const
 
 QRectF Polygon::bounds() const
 {
-    return m_boundsRect;
+    return toQRectF(m_pImpl->m_polygon.bbox());
 }
 
 bool Polygon::inside(const QPointF& point, bool bStrict) const
 {
-    if (!insideRect(point, m_boundsRect))
+    if (!insideRect(point, bounds()))
     {
         return false;
     }
