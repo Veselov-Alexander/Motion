@@ -9,7 +9,7 @@ void GenerateRandom::generateInternal()
     DisplayView* pDisplayView = DisplayView::getInstance();
     auto device = pDisplayView->getDevicePolygon();
 
-    int n = rand() % 30 + 20;
+    int n = rand() % 70 + 30;
     
     const int w = DisplayView::WIDTH * 0.75;
     const int h = DisplayView::HEIGHT * 0.75;

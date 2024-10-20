@@ -51,7 +51,7 @@ void IdleState::zoomEvent(QWheelEvent* pWheelEvent)
     DisplayView* pDisplayView = DisplayView::getInstance();
 
     double angle = pWheelEvent->angleDelta().y();
-    double factor = std::pow(1.0015, angle);
+    double factor = std::pow(1.0005, angle);
 
     qreal zoom = pDisplayView->transform().scale(factor, factor).mapRect(QRectF(0, 0, 1, 1)).width();
 

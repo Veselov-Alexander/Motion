@@ -36,7 +36,7 @@ public:
     friend class VisionPathFinder;
     friend class RegularPathFinder;
 
-    const static int HEIGHT = 2295;
+    const static int HEIGHT = 2295 * 1.5;
     const static int WIDTH = DisplayView::HEIGHT * 2;
 
     const static QPolygonF DEFAULT;

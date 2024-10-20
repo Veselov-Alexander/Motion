@@ -32,7 +32,7 @@ protected:
 
         std::vector<QPointF> points;
 
-        const int n = rand() % 10 + 3;
+        const int n = rand() % 10 + 4;
 
         for (int i = 0; i < n; ++i)
         {

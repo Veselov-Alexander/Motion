@@ -49,8 +49,8 @@ private:
 
 void DeviceGraphicsItem::move(const Path& path)
 {
-    int nSpeed = 2;
-    int nTotalDuration = pathLength(path) * nSpeed;
+    float nSpeed = 0.5;
+    float nTotalDuration = pathLength(path) * nSpeed;
 
     m_positions.push(QGraphicsPolygonItem::pos());
     

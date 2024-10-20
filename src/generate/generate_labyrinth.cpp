@@ -7,7 +7,7 @@ namespace Motion
 
 void GenerateLabyrinth::generateInternal()
 {
-    const qreal fillCoef = 0.8;
+    const qreal fillCoef = 0.9;
     const qreal deviceScaleCoef = 1.3;
 
     QSizeF deviceSize = m_pDisplayView->getDevicePolygon().boundingRect().size();
@@ -31,13 +31,36 @@ void GenerateLabyrinth::generateInternal()
     dfs(start, 0);
 
     display();
+
+    int minx = m_topleft.x();
+    int miny = m_topleft.y();
+    int maxx = m_topleft.x() + m_cellSize * m;
+    int maxy = m_topleft.y() + m_cellSize * n;
+
+    auto d = m_cellSize / 3;
+    DisplayView* pDisplayView = DisplayView::getInstance();
+    auto p = QPolygonF() << QPointF(minx - d, miny) << QPointF(maxx + d, miny)
+                         << QPointF(maxx + d, miny - d)
+                         << QPointF(minx - d, miny - d);
+    pDisplayView->addObstacle(p);
+    p = QPolygonF() << QPointF(maxx, miny) << QPointF(maxx, maxy)
+                    << QPointF(maxx + d, maxy) << QPointF(maxx + d, miny);
+    pDisplayView->addObstacle(p);
+    p = QPolygonF() << QPointF(maxx + d, maxy) << QPointF(minx - d, maxy)
+                    << QPointF(minx - d, maxy + d)
+                    << QPointF(maxx + d, maxy + d);
+    pDisplayView->addObstacle(p);
+    p = QPolygonF() << QPointF(minx, maxy) << QPointF(minx, miny)
+                    << QPointF(minx - d, miny) << QPointF(minx - d, maxy);
+    pDisplayView->addObstacle(p);
 }
 
-QPolygonF createPolygon(const QPointF& topleft, qreal m_cellSize, int i, int j, int div = 3)
+QPolygonF createPolygon(const QPointF& topleft, qreal m_cellSize, int i, int j, int div = 1)
 {
     const qreal EPS = 1;
     QPolygonF polygon;
-    QPointF tl = topleft + QPointF(i * m_cellSize, j * m_cellSize);
+    QPointF tl = topleft + QPointF(i * m_cellSize - m_cellSize,
+                                   j * m_cellSize - m_cellSize);
     polygon.append(tl + QPointF(-EPS, -EPS));
     polygon.append(tl + QPointF(m_cellSize / div + EPS, -EPS));
     polygon.append(tl + QPointF(m_cellSize / div + EPS, m_cellSize / div + EPS));
@@ -61,7 +84,7 @@ void GenerateLabyrinth::display()
                 bool bottom = inside(i, j + 1) ? !m_visited[i][j + 1] : false;
 
 
-                auto size = m_cellSize / 3;
+                auto size = m_cellSize;
 
                 auto p = createPolygon(m_topleft + QPointF(size, size), m_cellSize, i, j);
                 m_pDisplayView->addObstacle(p);
@@ -95,7 +118,7 @@ void GenerateLabyrinth::display()
 }
 
 bool GenerateLabyrinth::dfs(const int i, const int j)
-{
+ {
     if (!inside(i, j) || m_visited[i][j] || neighbors(i, j) > 2)
         return false;
 
