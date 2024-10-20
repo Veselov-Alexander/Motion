@@ -49,8 +49,6 @@ void FileManager::openFile(const QString& path)
     }
     else
     {
-        try
-        {
             QXmlStreamReader xmlReader;
             xmlReader.setDevice(&file);
 
@@ -129,15 +127,6 @@ void FileManager::openFile(const QString& path)
             pDisplayView->useSensors(bUseSensors);
 
             m_lastFileInfo = { path, obstacles.size(), device };
-        }
-        catch (...)
-        {
-            QMessageBox::warning(
-                pDisplayView->parentWidget(),
-                "File error",
-                "Corrupted file."
-            );
-        }
     }
 }
 

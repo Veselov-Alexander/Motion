@@ -2,7 +2,7 @@
 
 #include <boost/polygon/voronoi.hpp>
 #include "motion/algorithms/utils.h"
-
+#include "motion/display_view.h"
 #include <unordered_set>
 
 using boost::polygon::voronoi_builder;
@@ -177,16 +177,51 @@ std::vector<QLineF> voronoiDiagramToLines(const voronoi_diagram<double>& vd)
 
 void pushBounds(std::vector<Segment>& segments)
 {
-    auto bbox = getSceneBBox();
-    auto tl = bbox.topLeft();
-    auto tr = bbox.topRight();
-    auto bl = bbox.bottomLeft();
-    auto br = bbox.bottomRight();
+    int minx = segments[0].p0.a;
+    int miny = segments[0].p0.b;
+    int maxx = segments[0].p1.a;
+    int maxy = segments[0].p1.b;
+    for (const auto& s : segments)
+    {
+        minx = std::min(minx, s.p0.a);
+        miny = std::min(miny, s.p0.b);
+        maxx = std::max(maxx, s.p0.a);
+        maxy = std::max(maxy, s.p0.b);
+        minx = std::min(minx, s.p1.a);
+        miny = std::min(miny, s.p1.b);
+        maxx = std::max(maxx, s.p1.a);
+        maxy = std::max(maxy, s.p1.b);
+    }
 
-    segments.push_back(Segment(tl.x(), tl.y(), tr.x(), tr.y()));
-    segments.push_back(Segment(tr.x(), tr.y(), br.x(), br.y()));
-    segments.push_back(Segment(br.x(), br.y(), bl.x(), bl.y()));
-    segments.push_back(Segment(bl.x(), bl.y(), tl.x(), tl.y()));
+    minx -= 100;
+    miny -= 100;
+    maxx += 100;
+    maxy += 100;
+
+    segments.push_back(Segment(minx, miny, maxx, miny));
+    segments.push_back(Segment(maxx, miny, maxx, maxy));
+    segments.push_back(Segment(maxx, maxy, minx, maxy));
+    segments.push_back(Segment(minx, maxy, minx, miny));
+
+    auto d = 50;
+    DisplayView* pDisplayView = DisplayView::getInstance();
+    auto p = QPolygonF() << QPointF(minx - d, miny) << QPointF(maxx + d, miny)
+                         << QPointF(maxx + d, miny - d) << QPointF(minx - d, miny - d);
+    pDisplayView->addObstacle(p);
+
+    p = QPolygonF() << QPointF(maxx, miny) << QPointF(maxx, maxy)
+                    << QPointF(maxx + d, maxy) << QPointF(maxx + d, miny);
+    pDisplayView->addObstacle(p);
+
+    p = QPolygonF() << QPointF(maxx + d, maxy) << QPointF(minx - d, maxy)
+                    << QPointF(minx - d, maxy + d) << QPointF(maxx + d, maxy + d);
+
+    pDisplayView->addObstacle(p);
+
+    p = QPolygonF() << QPointF(minx, maxy) << QPointF(minx, miny)
+                    << QPointF(minx - d, miny) << QPointF(minx - d, maxy);
+
+    pDisplayView->addObstacle(p);
 }
 
 std::vector<QPolygonF> voronoiDiagram_1(const std::vector<QPointF>& sites)

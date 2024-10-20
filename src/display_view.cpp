@@ -1,4 +1,4 @@
-#include "motion/display_view.h"
+﻿#include "motion/display_view.h"
 
 #include "motion/display_view.h"
 #include "motion/states/idle_state.h"
@@ -6,6 +6,8 @@
 #include "motion/algorithms/utils.h"
 
 #include <QtMath>
+#include <QSet>
+#include <QPointF>
 
 namespace Motion
 {
@@ -75,7 +77,53 @@ const QPolygonF DisplayView::DEFAULT = THIN_DRONE;
 
 DisplayView* DisplayView::m_pInstance = nullptr;
 
-bool bUseVision = true;
+bool bUseVision = false;
+
+QPolygonF removeIdenticalPoints(const QPolygonF& polygon) {
+  QPolygonF resultPolygon;
+
+  // Iterate through each point in the original polygon
+  for (const QPointF& point : polygon) {
+    // Check if the point is already in the result polygon
+    bool isDuplicate = false;
+    for (const QPointF& existingPoint : resultPolygon) {
+      if (point == existingPoint) {
+        isDuplicate = true;
+        break;  // Break if a duplicate is found
+      }
+    }
+
+    // If the point is not a duplicate, add it to the result polygon
+    if (!isDuplicate) {
+      resultPolygon << point;
+    }
+  }
+
+  return resultPolygon;
+}
+
+QVector<QPolygonF> textToPolygons(const QString& text, const QFont& font) {
+  QVector<QPolygonF> polygons;
+  QFontMetrics fontMetrics(font);
+
+  // Starting position for the text
+  qreal xOffset = -1000;
+
+  // Iterate through each character in the string
+  for (const QChar& c : text) {
+    QPainterPath charPath;
+    charPath.addText(xOffset, fontMetrics.ascent(), font, c);
+
+    // Convert the character path to a polygon and add it to the vector
+    QPolygonF polygon = charPath.toFillPolygon();
+    polygons.append(polygon);
+
+    // Update the xOffset for the next character
+    xOffset += fontMetrics.horizontalAdvance(c);
+  }
+
+  return polygons;
+}
 
 DisplayView::DisplayView(QWidget *parent) : QGraphicsView(parent)
 {
@@ -119,6 +167,12 @@ DisplayView::DisplayView(QWidget *parent) : QGraphicsView(parent)
         setScene(m_pScene);
         setState(new IdleState());
         setRenderHints(QPainter::Antialiasing);
+
+        QString myText = "MOTION";
+        QFont myFont("Montserrat", 150);  // Specify the font and size
+        auto polygonPaths = textToPolygons(myText, myFont);
+
+        //for (const auto& p : polygonPaths) addObstacle(removeIdenticalPoints(p));
     }
     else
     {
